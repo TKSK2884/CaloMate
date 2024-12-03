@@ -12,6 +12,11 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/ui": "^2.19.2",
-    "nuxt": "^3.14.1592"
+    "nuxt": "^3.14.1592",
+    "sass-embedded": "^1.81.0"
+  },
+  "dependencies": {
+    "@element-plus/nuxt": "^1.1.0",
+    "element-plus": "^2.9.0"
   }
 }
