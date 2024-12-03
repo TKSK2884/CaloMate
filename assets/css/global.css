@@ -1,0 +1,103 @@
+:root {
+    --background: #ffffff;
+    --foreground: #0b0c10;
+
+    --card: #ffffff;
+    --card-foreground: #0b0c10;
+
+    --popover: #ffffff;
+    --popover-foreground: #0b0c10;
+
+    --primary: #18181b;
+    --primary-foreground: #ffffff;
+
+    --secondary: #f0f6fc;
+    --secondary-foreground: #1b1f23;
+
+    --muted: #f0f6fc;
+    --muted-foreground: #6c798f;
+
+    --accent: #f0f6fc;
+    --accent-foreground: #1b1f23;
+
+    --destructive: #d73a49;
+    --destructive-foreground: #fefefe;
+
+    --border: #d1d5db;
+    --input: #d1d5db;
+    --ring: #22863a;
+
+    --radius: 0.5rem;
+}
+
+.dark {
+    --background: #0b0c10;
+    --foreground: #fefefe;
+
+    --card: #0b0c10;
+    --card-foreground: #fefefe;
+
+    --popover: #0b0c10;
+    --popover-foreground: #fefefe;
+
+    --primary: #ffffff;
+    --primary-foreground: #034d00;
+
+    --secondary: #24292e;
+    --secondary-foreground: #fefefe;
+
+    --muted: #24292e;
+    --muted-foreground: #a0aec0;
+
+    --accent: #24292e;
+    --accent-foreground: #fefefe;
+
+    --destructive: #8b0000;
+    --destructive-foreground: #fefefe;
+
+    --border: #24292e;
+    --input: #24292e;
+    --ring: #1f6026;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+.bg-primary {
+    background-color: var(--primary);
+    &:hover {
+        background-color: var(--primary);
+        opacity: 0.9;
+    }
+}
+
+.dark .bg-primary {
+    background-color: var(--primary);
+    &:hover {
+        background-color: var(--primary);
+        opacity: 0.9;
+    }
+}
+
+.bg-card {
+    background-color: var(--card);
+}
+
+.text-primary-foreground {
+    color: var(--primary-foreground);
+}
+
+.text-muted-foreground {
+    color: var(--muted-foreground);
+}
+
+.text-primary {
+    color: var(--primary);
+}
