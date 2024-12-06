@@ -1,6 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
+    runtimeConfig: {
+        public: {
+            apiBase: process.env.VUE_APP_API_URL || "http://localhost:8566",
+        },
+    },
     modules: ["@nuxt/ui", "@element-plus/nuxt"],
 
     colorMode: {
