@@ -70,17 +70,11 @@ body {
     color: var(--secondary-foreground);
 }
 
-.bg-primary {
-    background-color: var(--primary);
-    &:hover {
-        background-color: var(--primary);
-        opacity: 0.9;
-    }
-}
-
+.bg-primary,
 .dark .bg-primary {
     background-color: var(--primary);
-    &:hover {
+    &:hover,
+    &:disabled {
         background-color: var(--primary);
         opacity: 0.9;
     }
