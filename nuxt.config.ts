@@ -6,7 +6,7 @@ export default defineNuxtConfig({
             apiBase: process.env.VUE_APP_API_URL || "http://localhost:8566",
         },
     },
-    modules: ["@nuxt/ui", "@element-plus/nuxt"],
+    modules: ["@nuxt/ui", "@element-plus/nuxt", "@pinia/nuxt"],
 
     colorMode: {
         preference: "light", // default value of $colorMode.preference
