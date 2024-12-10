@@ -4,7 +4,7 @@
             @submit.prevent="trySignup"
             class="max-w-md mx-auto bg-card p-8 rounded-lg shadow dark:shadow-white/10"
         >
-            <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
 
             <div class="mb-2">아이디</div>
             <UInput v-model="formData.id" required />
@@ -40,6 +40,7 @@ import type { RuntimeConfig } from "nuxt/schema";
 import type { APIResponse, SignupFormData } from "~/structure/type";
 
 const config: RuntimeConfig = useRuntimeConfig();
+const authStore = useAuthStore();
 
 const confirmPassword: Ref<string> = ref("");
 const loading: Ref<boolean> = ref(false);
@@ -48,6 +49,15 @@ const formData: Ref<SignupFormData> = ref({
     id: "",
     password: "",
     nickname: "",
+});
+
+onBeforeMount(async () => {
+    await authStore.ensureAccessToken();
+
+    if (authStore.accessToken != null) {
+        ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
+        navigateTo("/dashboard");
+    }
 });
 
 const trySignup = async () => {
