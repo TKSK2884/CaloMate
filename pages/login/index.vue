@@ -29,14 +29,23 @@
 </template>
 
 <script setup lang="ts">
-import type { RuntimeConfig } from "nuxt/schema";
-import type { APIResponse, loginFormData } from "~/structure/type";
+import type { APIResponse, LoginData, loginFormData } from "~/structure/type";
 
-const config: RuntimeConfig = useRuntimeConfig();
+const config = useRuntimeConfig();
+const authStore = useAuthStore();
 
 const formData: Ref<loginFormData> = ref({
     id: "",
     password: "",
+});
+
+onBeforeMount(async () => {
+    await authStore.ensureAccessToken();
+
+    if (authStore.accessToken != null) {
+        ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
+        navigateTo("/dashboard");
+    }
 });
 
 const tryLogin = async () => {
@@ -51,10 +60,11 @@ const tryLogin = async () => {
     }
 
     try {
-        const result: APIResponse<null> = await $fetch("/auth/login", {
+        const result: APIResponse<LoginData> = await $fetch("/auth/login", {
             baseURL: config.public.apiBase,
             method: "POST",
             body: formData.value,
+            credentials: "include",
         });
 
         if (!result.success) {
@@ -64,8 +74,16 @@ const tryLogin = async () => {
             });
         }
 
+        authStore.login(result.data);
+
         ElMessage({ message: "로그인 성공", type: "success" });
         navigateTo("/dashboard");
-    } catch {}
+    } catch (error) {
+        ElMessage({
+            message: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
+            type: "error",
+        });
+        console.error("로그인 에러:", error);
+    }
 };
 </script>

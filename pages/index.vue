@@ -74,28 +74,41 @@
                     지금 바로 시작하세요
                 </h3>
                 <div class="mb-4 text-muted-foreground">
-                    회원 가입하고 <b>CaloMate AI</b>와 함께 건강한 삶을 만들어
-                    가세요.
+                    <template v-if="!isLogin()">
+                        회원 가입하고 <b>CaloMate AI</b>와 함께 건강한 삶을
+                        만들어 가세요.
+                    </template>
                 </div>
                 <div
                     class="flex flex-col md:flex-row justify-center items-center gap-4"
                 >
-                    <NuxtLink to="/signup">
-                        <UButton
-                            class="bg-primary text-primary-foreground hover:bg-primary/90"
-                        >
-                            무료 회원가입
-                        </UButton>
-                    </NuxtLink>
-                    <p class="text-sm text-muted-foreground">
-                        이미 계정이 있으신가요?
-                        <NuxtLink
-                            to="/login"
-                            class="text-primary hover:underline"
-                        >
-                            로그인
+                    <template v-if="!isLogin()">
+                        <NuxtLink to="/signup">
+                            <UButton
+                                class="bg-primary text-primary-foreground hover:bg-primary/90"
+                            >
+                                무료 회원가입
+                            </UButton>
                         </NuxtLink>
-                    </p>
+                        <p class="text-sm text-muted-foreground">
+                            이미 계정이 있으신가요?
+                            <NuxtLink
+                                to="/login"
+                                class="text-primary hover:underline"
+                            >
+                                로그인
+                            </NuxtLink>
+                        </p>
+                    </template>
+                    <template v-else>
+                        <NuxtLink to="/dashboard">
+                            <UButton
+                                class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-full text-lg"
+                            >
+                                시작하기
+                            </UButton>
+                        </NuxtLink>
+                    </template>
                 </div>
             </div>
         </div>
@@ -106,4 +119,10 @@
 definePageMeta({
     layoutStyle: "home",
 });
+
+const authStore = useAuthStore();
+
+const isLogin = (): boolean => {
+    return authStore.accessToken != null;
+};
 </script>
