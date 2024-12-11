@@ -105,13 +105,12 @@ export const useAuthStore = defineStore("user", () => {
                 method: "POST",
                 credentials: "include",
             });
+            // ElMessage({ message: "로그아웃 되었습니다.", type: "success" });
         } catch (error) {
             console.error("로그아웃 에러:", error);
         } finally {
             user.value = null;
             accessToken.value = null;
-
-            ElMessage({ message: "로그아웃 되었습니다.", type: "success" });
         }
     };
 
