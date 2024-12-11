@@ -1,30 +1,30 @@
 <template>
     <UContainer class="mt-32">
-        <form
-            @submit.prevent="tryLogin"
-            class="max-w-md mx-auto bg-card p-8 rounded-lg shadow dark:shadow-white/10"
-        >
-            <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
+        <UCard class="max-w-md mx-auto bg-card p-8">
+            <form @submit.prevent="tryLogin">
+                <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
 
-            <div class="mb-2">아이디</div>
-            <UInput v-model="formData.id" required />
-            <div class="my-2">비밀번호</div>
-            <UInput v-model="formData.password" required />
+                <div class="mb-2">아이디</div>
+                <UInput v-model="formData.id" required />
+                <div class="my-2">비밀번호</div>
+                <UInput v-model="formData.password" required />
 
-            <UButton
-                class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90"
-                type="submit"
-            >
-                로그인
-            </UButton>
+                <UButton
+                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
+                    type="submit"
+                    :loading="loading"
+                >
+                    로그인
+                </UButton>
 
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-                계정이 없으신가요?
-                <NuxtLink to="/signup" class="text-primary hover:underline">
-                    회원가입
-                </NuxtLink>
-            </p>
-        </form>
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                    계정이 없으신가요?
+                    <NuxtLink to="/signup" class="text-primary hover:underline">
+                        회원가입
+                    </NuxtLink>
+                </p>
+            </form>
+        </UCard>
     </UContainer>
 </template>
 
@@ -33,6 +33,8 @@ import type { APIResponse, LoginData, loginFormData } from "~/structure/type";
 
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
+
+const loading: Ref<boolean> = ref(false);
 
 const formData: Ref<loginFormData> = ref({
     id: "",
@@ -60,6 +62,8 @@ const tryLogin = async () => {
     }
 
     try {
+        loading.value = true;
+
         const result: APIResponse<LoginData> = await $fetch("/auth/login", {
             baseURL: config.public.apiBase,
             method: "POST",
@@ -84,6 +88,8 @@ const tryLogin = async () => {
             type: "error",
         });
         console.error("로그인 에러:", error);
+    } finally {
+        loading.value = false;
     }
 };
 </script>
