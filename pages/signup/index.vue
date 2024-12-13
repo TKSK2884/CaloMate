@@ -1,37 +1,39 @@
 <template>
     <UContainer class="mt-32">
-        <form
-            @submit.prevent="trySignup"
-            class="max-w-md mx-auto bg-card p-8 rounded-lg shadow dark:shadow-white/10"
-        >
-            <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
+        <UCard class="max-w-md mx-auto bg-card p-8">
+            <form @submit.prevent="trySignup">
+                <h2 className="text-2xl font-bold mb-6 text-center">
+                    회원가입
+                </h2>
 
-            <div class="mb-2">아이디</div>
-            <UInput v-model="formData.id" required />
+                <div class="mb-2">아이디</div>
+                <UInput v-model="formData.id" required />
 
-            <div class="my-2">비밀번호</div>
-            <UInput v-model="formData.password" required />
+                <div class="my-2">비밀번호</div>
+                <UInput v-model="formData.password" required />
 
-            <div class="my-2">비밀번호 확인</div>
-            <UInput v-model="confirmPassword" required />
+                <div class="my-2">비밀번호 확인</div>
+                <UInput v-model="confirmPassword" required />
 
-            <div class="my-2">닉네임</div>
-            <UInput v-model="formData.nickname" required />
+                <div class="my-2">닉네임</div>
+                <UInput v-model="formData.nickname" required />
 
-            <UButton
-                class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
-                type="submit"
-            >
-                회원가입
-            </UButton>
+                <UButton
+                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
+                    type="submit"
+                    :loading="loading"
+                >
+                    회원가입
+                </UButton>
 
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-                이미 계정이 있으신가요?
-                <NuxtLink to="/login" class="text-primary hover:underline">
-                    로그인
-                </NuxtLink>
-            </p>
-        </form>
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                    이미 계정이 있으신가요?
+                    <NuxtLink to="/login" class="text-primary hover:underline">
+                        로그인
+                    </NuxtLink>
+                </p>
+            </form>
+        </UCard>
     </UContainer>
 </template>
 
@@ -99,7 +101,13 @@ const trySignup = async () => {
         if (!result.success) return;
 
         ElMessage({ message: "회원가입에 성공했습니다.", type: "success" });
-    } catch {
+        navigateTo("/login");
+    } catch (error) {
+        ElMessage({
+            message: "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.",
+            type: "error",
+        });
+        console.error("회원가입 에러:", error);
     } finally {
         loading.value = false;
     }
