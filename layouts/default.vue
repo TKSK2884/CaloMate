@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!loadingStore.globalLoading">
         <header v-if="isHeader" class="secondary py-6">
             <div
                 class="container mx-auto px-4 flex justify-between items-center"
@@ -19,6 +19,9 @@
                             class="text-primary hover:underline"
                         >
                             대시보드
+                        </NuxtLink>
+                        <NuxtLink to="/ai" class="text-primary hover:underline">
+                            AI 상담
                         </NuxtLink>
                         <NuxtLink
                             to="/profile"
@@ -58,6 +61,13 @@
 
         <slot />
     </div>
+    <div v-else>
+        <div class="flex items-center justify-center min-h-screen">
+            <div
+                class="w-16 h-16 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin"
+            />
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -70,9 +80,13 @@ const isHeader: Ref<boolean> = ref(true);
 const isLoginMenu = ref(false);
 
 const authStore = useAuthStore();
+const loadingStore = useLoadingStore();
 
 onMounted(async () => {
+    loadingStore.loading();
+
     await authStore.restoreAuthState();
+    loadingStore.loadingCompleted();
 });
 
 const isLogin = (): boolean => {
