@@ -58,7 +58,7 @@ onBeforeMount(async () => {
 
     if (authStore.accessToken != null) {
         ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
-        navigateTo("/dashboard");
+        navigateTo("/profile");
     }
 });
 

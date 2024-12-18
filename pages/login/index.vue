@@ -46,7 +46,7 @@ onBeforeMount(async () => {
 
     if (authStore.accessToken != null) {
         ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
-        navigateTo("/dashboard");
+        navigateTo("/profile");
     }
 });
 
@@ -81,7 +81,7 @@ const tryLogin = async () => {
         authStore.login(result.data);
 
         ElMessage({ message: "로그인 성공", type: "success" });
-        navigateTo("/dashboard");
+        navigateTo("/profile");
     } catch (error) {
         ElMessage({
             message: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
