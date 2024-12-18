@@ -1,13 +1,13 @@
 export interface ProfileFormData {
     age: number;
-    gender: string;
+    gender: number;
     height: number;
     weight: number;
-    activityLevel: SelecetOption | object;
-    target: SelecetOption | object;
+    activityLevel: SelectOption | object;
+    target: SelectOption | object;
 }
 
-export interface SelecetOption {
+export interface SelectOption {
     id: string;
     label: string;
 }
@@ -21,4 +21,51 @@ export interface SignupFormData {
 export interface loginFormData {
     id: string;
     password: string;
+}
+
+export interface APIResponse<T> {
+    success: boolean;
+    data: T;
+
+    message?: string;
+    error?: string;
+}
+
+export interface UserInfo {
+    id: number;
+    nickname: string;
+}
+
+export interface UserProfile {
+    age: number;
+    gender: string;
+    height: number;
+    weight: number;
+    activityLevel: string;
+    target: string;
+}
+
+export interface MypageProfile {
+    age: number;
+    gender: string;
+    height: number;
+    weight: number;
+    activityLevel: string;
+    target: string;
+    created_at: Date;
+}
+
+export interface MypageHistory {
+    question: string;
+    content: string;
+    created_at: Date;
+}
+
+export interface LoginData {
+    accessToken: string;
+    user: UserInfo;
+}
+
+export enum KoreaTimeEnum {
+    Day = "day",
 }
