@@ -1,10 +1,10 @@
 <template>
-    <div v-if="!loadingStore.globalLoading">
+    <div>
         <header v-if="isHeader" class="secondary py-6">
             <div
                 class="container mx-auto px-4 flex justify-between items-center"
             >
-                <NuxtLink v-if="isLogin()" to="/dashboard">
+                <NuxtLink v-if="isLogin()" to="/mypage">
                     <h1 class="text-3xl font-bold">CaloMate AI</h1>
                 </NuxtLink>
 
@@ -15,19 +15,19 @@
                 <div class="flex items-center space-x-5">
                     <template v-if="isLogin()">
                         <NuxtLink
-                            to="/dashboard"
+                            to="/profile"
                             class="text-primary hover:underline"
                         >
-                            대시보드
+                            프로필
                         </NuxtLink>
                         <NuxtLink to="/ai" class="text-primary hover:underline">
                             AI 상담
                         </NuxtLink>
                         <NuxtLink
-                            to="/profile"
+                            to="/mypage"
                             class="text-primary hover:underline"
                         >
-                            프로필
+                            마이페이지
                         </NuxtLink>
                         <div
                             @click="logout"
@@ -61,17 +61,11 @@
 
         <slot />
     </div>
-    <div v-else>
-        <div class="flex items-center justify-center min-h-screen">
-            <div
-                class="w-16 h-16 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin"
-            />
-        </div>
-    </div>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/auth";
+// import { useLoadingStore } from "~/stores/loading";
 
 const route = useRoute();
 
@@ -82,12 +76,16 @@ const isLoginMenu = ref(false);
 const authStore = useAuthStore();
 const loadingStore = useLoadingStore();
 
-onMounted(async () => {
-    loadingStore.loading();
-
-    await authStore.restoreAuthState();
-    loadingStore.loadingCompleted();
-});
+// onMounted(async () => {
+//     try {
+//         loadingStore.loading();
+//         await authStore.restoreAuthState();
+//     } catch (error) {
+//         return;
+//     } finally {
+//         loadingStore.loadingCompleted();
+//     }
+// });
 
 const isLogin = (): boolean => {
     return authStore.accessToken != null;

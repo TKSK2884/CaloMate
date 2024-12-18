@@ -36,25 +36,6 @@ export const useAuthStore = defineStore("user", () => {
         accessToken.value = result.data.accessToken;
     };
 
-    const fetchUser = async () => {
-        try {
-            const result: APIResponse<UserState> = await $fetch("/auth/user", {
-                baseURL: config.public.apiBase,
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${accessToken.value}`,
-                },
-            });
-
-            if (result.success) {
-                user.value = result.data;
-            }
-        } catch (error) {
-            console.error("사용자 정보 가져오기 실패:", error);
-            logout();
-        }
-    };
-
     const refreshAccessToken = async () => {
         try {
             const result: APIResponse<{ accessToken: string }> = await $fetch(

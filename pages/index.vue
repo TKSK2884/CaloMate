@@ -61,8 +61,7 @@
                         지속적인 동기부여
                     </h3>
                     <p class="text-muted-foreground">
-                        목표 달성에 따른 보상과 챌린지로 꾸준한 동기를
-                        제공합니다.
+                        목표 달성을 위한 꾸준한 동기를 제공합니다.
                     </p>
                 </div>
             </div>
@@ -101,7 +100,7 @@
                         </p>
                     </template>
                     <template v-else>
-                        <NuxtLink to="/dashboard">
+                        <NuxtLink to="/mypage">
                             <UButton
                                 class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-full text-lg"
                             >
