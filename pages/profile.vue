@@ -3,7 +3,7 @@
         <UCard class="max-w-md mx-auto">
             <form @submit.prevent="saveProfile">
                 <h2 className="text-2xl font-bold mb-6 text-center">
-                    프로필 입력
+                    프로필 {{ isLogin() ? "수정" : "입력" }}
                 </h2>
                 <div class="mb-2">나이</div>
                 <UInput v-model="formData.age" type="number" />
@@ -40,15 +40,21 @@
 
 <script setup lang="ts">
 import type { RuntimeConfig } from "nuxt/schema";
-import type { APIResponse, ProfileFormData } from "~/structure/type";
+import type {
+    APIResponse,
+    ProfileFormData,
+    SelectOption,
+    UserProfile,
+} from "~/structure/type";
+
+const config: RuntimeConfig = useRuntimeConfig();
 
 const authStore = useAuthStore();
+const loadingStore = useLoadingStore();
 
 definePageMeta({
     title: "프로필 설정",
 });
-
-const config: RuntimeConfig = useRuntimeConfig();
 
 const formData: Ref<ProfileFormData> = ref({
     age: 20,
@@ -83,6 +89,61 @@ const targetOption = [
     { id: "maintain", label: "체중 유지" },
     { id: "gain_muscle", label: "근육 증가" },
 ];
+
+onMounted(async () => {
+    await checkProfile();
+});
+
+const isLogin = (): boolean => {
+    return authStore.accessToken != null;
+};
+
+const checkProfile = async () => {
+    try {
+        const result: APIResponse<UserProfile | null> = await $fetch(
+            "/profile/check",
+            {
+                baseURL: config.public.apiBase,
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${authStore.accessToken}`,
+                },
+            }
+        );
+
+        if (result.data == null) {
+            return;
+        }
+
+        const userProfile: UserProfile = result.data;
+
+        formData.value.age = userProfile.age;
+        if (userProfile.gender != "male") {
+            formData.value.gender = 2;
+        } else {
+            formData.value.gender = 1;
+        }
+
+        formData.value.height = userProfile.height;
+        formData.value.weight = userProfile.weight;
+
+        const foundLevel: SelectOption | undefined = activityLevelOption.find(
+            (level) => level.id == userProfile.activityLevel
+        );
+
+        if (foundLevel != undefined) {
+            formData.value.activityLevel = foundLevel;
+        }
+
+        const foundTarget: SelectOption | undefined = targetOption.find(
+            (target) => target.id == userProfile.target
+        );
+
+        if (foundTarget != undefined) {
+            formData.value.target = foundTarget;
+        }
+    } catch (error) {}
+};
 
 const saveProfile = async () => {
     if (formData.value == null) return;
@@ -135,11 +196,16 @@ const saveProfile = async () => {
             });
 
         if (!result.success) {
+            ElMessage({
+                message: "프로필 설정중 오류발생 다시 시도해주세요",
+                type: "error",
+            });
+
             return;
         }
 
         if (result.message != null) {
-            ElMessage({ message: result.message, type: "warning" });
+            ElMessage({ message: result.message, type: "info" });
             return;
         }
 
@@ -163,4 +229,13 @@ const saveProfile = async () => {
         return;
     }
 };
+
+watch(
+    () => loadingStore.appInitial,
+    async (n) => {
+        if (n) {
+            await checkProfile();
+        }
+    }
+);
 </script>
