@@ -4,7 +4,7 @@
             <div
                 class="container mx-auto px-4 flex justify-between items-center"
             >
-                <NuxtLink v-if="isLogin()" to="/mypage">
+                <NuxtLink v-if="isLogin()" to="/">
                     <h1 class="text-3xl font-bold">CaloMate AI</h1>
                 </NuxtLink>
 
