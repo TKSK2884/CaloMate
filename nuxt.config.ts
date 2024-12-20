@@ -6,6 +6,14 @@ export default defineNuxtConfig({
             apiBase: process.env.VUE_APP_API_URL || "http://localhost:8566",
         },
     },
+
+    app: {
+        head: {
+            title: "CaloMate AI",
+            meta: [{ name: "description", content: "칼로메이트 AI입니다." }],
+        },
+    },
+
     modules: ["@nuxt/ui", "@element-plus/nuxt", "@pinia/nuxt"],
 
     colorMode: {
