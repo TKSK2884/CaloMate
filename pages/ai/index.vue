@@ -1,6 +1,6 @@
 <template>
     <UContainer>
-        <h2 className="text-3xl font-bold my-6">AI 상담</h2>
+        <h2 class="text-3xl font-bold my-6">AI 상담</h2>
         <UCard>
             <!-- 제목 -->
             <div class="text-2xl font-bold mb-4">CaloMate AI와 상담하기</div>

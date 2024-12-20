@@ -2,7 +2,7 @@
     <UContainer class="mt-8">
         <UCard class="max-w-md mx-auto">
             <form @submit.prevent="saveProfile">
-                <h2 className="text-2xl font-bold mb-6 text-center">
+                <h2 class="text-2xl font-bold mb-6 text-center">
                     프로필 {{ isLogin() ? "수정" : "입력" }}
                 </h2>
                 <div class="mb-2">나이</div>
