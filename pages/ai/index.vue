@@ -30,7 +30,22 @@
 
             <!-- 결과 -->
             <template v-if="!loading && generateResult != null">
-                <div v-html="generateResult" />
+                <div class="mb-8" v-html="generateResult" />
+                <div class="flex gap-4 mb-8">
+                    <UButton
+                        @click="clearResult"
+                        class="bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                        다시하기
+                    </UButton>
+                    <UButton
+                        v-if="!isLogin()"
+                        @click="goLogin()"
+                        class="bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                        로그인하고 결과 저장하기
+                    </UButton>
+                </div>
             </template>
 
             <!-- 로딩 애니메이션 -->
@@ -76,6 +91,16 @@ onMounted(() => {
     }
 });
 
+onBeforeUnmount(() => {
+    if (token.value != null) {
+        sessionStorage.setItem("token", token.value);
+    }
+});
+
+const isLogin = (): boolean => {
+    return authStore.accessToken != null;
+};
+
 const sendText = async () => {
     if (textArea.value.trim() == "") {
         ElMessage({ message: "상담받을 내용을 입력해주세요", type: "warning" });
@@ -108,5 +133,16 @@ const sendText = async () => {
     } finally {
         loading.value = false;
     }
+};
+
+const clearResult = () => {
+    textArea.value = "";
+    generateResult.value = null;
+};
+
+const goLogin = () => {
+    navigateTo({
+        path: "/login",
+    });
 };
 </script>
