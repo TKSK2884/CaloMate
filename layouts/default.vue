@@ -4,15 +4,11 @@
             <div
                 class="container mx-auto px-4 flex justify-between items-center"
             >
-                <NuxtLink v-if="isLogin()" to="/">
-                    <h1 class="text-3xl font-bold">CaloMate AI</h1>
+                <NuxtLink to="/">
+                    <h1 class="text-2xl font-bold sm:text-3xl">CaloMate AI</h1>
                 </NuxtLink>
 
-                <NuxtLink v-else to="/">
-                    <h1 class="text-3xl font-bold">CaloMate AI</h1>
-                </NuxtLink>
-
-                <div class="flex items-center space-x-5">
+                <div class="items-center space-x-5 hidden sm:flex">
                     <template v-if="isLogin()">
                         <NuxtLink
                             to="/profile"
@@ -56,8 +52,87 @@
 
                     <ThemeToggle />
                 </div>
+                <div class="flex items-center block sm:hidden">
+                    <UButton
+                        @click="toggleMenu"
+                        icon="i-heroicons-bars-4"
+                        color="gray"
+                        variant="ghost"
+                    />
+                </div>
             </div>
         </header>
+
+        <!-- 오버레이 -->
+        <div
+            v-if="isMenuOpen"
+            @click="toggleMenu()"
+            class="fixed inset-0 bg-black z-10 opacity-50"
+        />
+        <div
+            class="fixed inset-y-0 right-0 w-2/4 bg-white z-20 transform transition-transform duration-500 ease-in-out dark:bg-black"
+            :class="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
+        >
+            <template v-if="isLogin()">
+                <NuxtLink to="/profile">
+                    <UButton
+                        color="white"
+                        variant="link"
+                        class="w-full min-h-16 block"
+                        >프로필</UButton
+                    >
+                </NuxtLink>
+                <NuxtLink to="/ai">
+                    <UButton
+                        color="white"
+                        variant="link"
+                        class="w-full min-h-16 block"
+                        >AI상담</UButton
+                    >
+                </NuxtLink>
+                <NuxtLink to="/mypage">
+                    <UButton
+                        color="white"
+                        variant="link"
+                        class="w-full min-h-16 block"
+                        >마이페이지</UButton
+                    >
+                </NuxtLink>
+                <UButton
+                    @click="logout"
+                    color="white"
+                    variant="link"
+                    class="w-full min-h-16 block"
+                    >로그아웃</UButton
+                >
+                <ThemeToggle
+                    class="w-full min-h-16 flex justify-center item-center"
+                />
+            </template>
+            <template v-else>
+                <NuxtLink to="/login">
+                    <UButton
+                        color="white"
+                        variant="link"
+                        class="w-full min-h-16 block"
+                        >로그인</UButton
+                    >
+                </NuxtLink>
+
+                <NuxtLink to="/signup">
+                    <UButton
+                        color="white"
+                        variant="link"
+                        class="w-full min-h-16 block"
+                    >
+                        회원가입
+                    </UButton>
+                </NuxtLink>
+                <ThemeToggle
+                    class="w-full min-h-16 flex justify-center item-center"
+                />
+            </template>
+        </div>
 
         <slot />
     </div>
@@ -65,30 +140,22 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/auth";
-// import { useLoadingStore } from "~/stores/loading";
 
 const route = useRoute();
 
 const pageTitle: Ref<string> = ref("");
 const isHeader: Ref<boolean> = ref(true);
 const isLoginMenu = ref(false);
+const isMenuOpen = ref(false);
 
 const authStore = useAuthStore();
-const loadingStore = useLoadingStore();
-
-// onMounted(async () => {
-//     try {
-//         loadingStore.loading();
-//         await authStore.restoreAuthState();
-//     } catch (error) {
-//         return;
-//     } finally {
-//         loadingStore.loadingCompleted();
-//     }
-// });
 
 const isLogin = (): boolean => {
     return authStore.accessToken != null;
+};
+
+const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
 };
 
 const logout = () => {
