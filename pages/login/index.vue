@@ -35,6 +35,7 @@ const config = useRuntimeConfig();
 const authStore = useAuthStore();
 
 const loading: Ref<boolean> = ref(false);
+const token: Ref<string | null> = ref(null);
 
 const formData: Ref<loginFormData> = ref({
     id: "",
@@ -48,6 +49,10 @@ onBeforeMount(async () => {
         ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
         navigateTo("/profile");
     }
+});
+
+onMounted(() => {
+    token.value = sessionStorage.getItem("token");
 });
 
 const tryLogin = async () => {
@@ -67,20 +72,28 @@ const tryLogin = async () => {
         const result: APIResponse<LoginData> = await $fetch("/auth/login", {
             baseURL: config.public.apiBase,
             method: "POST",
-            body: formData.value,
+            body: {
+                ...formData.value,
+                token: token.value,
+            },
             credentials: "include",
         });
 
-        if (!result.success) {
-            return ElMessage({
-                message: "로그인에 실패하였습니다.",
-                type: "error",
+        authStore.login(result.data);
+
+        if (result.message != null) {
+            ElMessage({
+                message: result.message,
+                type: "success",
             });
         }
 
-        authStore.login(result.data);
-
         ElMessage({ message: "로그인 성공", type: "success" });
+
+        if (token.value != null) {
+            sessionStorage.clear();
+        }
+
         navigateTo("/profile");
     } catch (error) {
         ElMessage({
