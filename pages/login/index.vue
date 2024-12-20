@@ -2,7 +2,7 @@
     <UContainer class="mt-32">
         <UCard class="max-w-md mx-auto bg-card p-8">
             <form @submit.prevent="tryLogin">
-                <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
+                <h2 class="text-2xl font-bold mb-6 text-center">로그인</h2>
 
                 <div class="mb-2">아이디</div>
                 <UInput v-model="formData.id" required />
@@ -17,7 +17,7 @@
                     로그인
                 </UButton>
 
-                <p className="mt-4 text-center text-sm text-muted-foreground">
+                <p class="mt-4 text-center text-sm text-muted-foreground">
                     계정이 없으신가요?
                     <NuxtLink to="/signup" class="text-primary hover:underline">
                         회원가입
