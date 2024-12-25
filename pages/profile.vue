@@ -28,7 +28,7 @@
                     :options="targetOption"
                 />
                 <UButton
-                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90"
+                    class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
                 >
                     프로필 저장

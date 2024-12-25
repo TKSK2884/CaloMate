@@ -17,7 +17,7 @@
                 <UInput v-model="formData.nickname" required />
 
                 <UButton
-                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
+                    class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
                     :loading="loading"
                 >

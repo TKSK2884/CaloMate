@@ -16,7 +16,7 @@
                 </div>
                 <NuxtLink to="/profile">
                     <UButton
-                        class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-full text-lg"
+                        class="bg-second text-primary-foreground hover:bg-second/90 px-8 py-3 rounded-full text-lg"
                     >
                         프로필 입력하기
                     </UButton>
@@ -94,7 +94,7 @@
                     <template v-if="!isLogin()">
                         <NuxtLink to="/signup">
                             <UButton
-                                class="bg-primary text-primary-foreground hover:bg-primary/90"
+                                class="bg-second text-primary-foreground hover:bg-second/90"
                             >
                                 무료 회원가입
                             </UButton>
@@ -112,7 +112,7 @@
                     <template v-else>
                         <NuxtLink to="/mypage">
                             <UButton
-                                class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-full text-lg"
+                                class="bg-second text-primary-foreground hover:bg-second/90 px-8 py-3 rounded-full text-lg"
                             >
                                 시작하기
                             </UButton>

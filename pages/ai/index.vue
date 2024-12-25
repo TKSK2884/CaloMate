@@ -15,7 +15,7 @@
                 <UButton
                     @click="sendText()"
                     :loading="loading"
-                    class="bg-primary text-primary-foreground hover:bg-primary/90"
+                    class="bg-second text-primary-foreground hover:bg-second/90"
                 >
                     전송
                 </UButton>
