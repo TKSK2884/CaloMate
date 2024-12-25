@@ -24,12 +24,13 @@
                     회원가입
                 </UButton>
 
-                <p class="mt-4 text-center text-sm text-muted-foreground">
+                <p class="my-4 text-center text-sm text-muted-foreground">
                     이미 계정이 있으신가요?
                     <NuxtLink to="/login" class="text-primary hover:underline">
                         로그인
                     </NuxtLink>
                 </p>
+                <div @click="loginWithKakao" :class="$style.kakaoLogin" />
             </form>
         </UCard>
     </UContainer>
@@ -51,6 +52,9 @@ const formData: Ref<SignupFormData> = ref({
     nickname: "",
 });
 
+const accessKey: string = config.public.kakaoAccessKey;
+const redirectURI: string = config.public.kakaoRedirectURI;
+
 onBeforeMount(async () => {
     await authStore.ensureAccessToken();
 
@@ -58,6 +62,14 @@ onBeforeMount(async () => {
         ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
         navigateTo("/profile");
     }
+});
+
+onMounted(() => {
+    window.addEventListener("message", messageHandler);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("message", messageHandler);
 });
 
 const trySignup = async () => {
@@ -110,4 +122,33 @@ const trySignup = async () => {
         loading.value = false;
     }
 };
+
+const loginWithKakao = () => {
+    const url: string = `https://kauth.kakao.com/oauth/authorize?client_id=${accessKey}&redirect_uri=${redirectURI}&response_type=code`;
+
+    window.open(url, "", "width=600, height=600");
+};
+
+const messageHandler = (event: MessageEvent) => {
+    if (event.origin !== config.public.origin) return;
+
+    const message = event.data;
+
+    if (message.type === "LOGIN_SUCCESS") {
+        authStore.login(message.data);
+
+        ElMessage({ message: "로그인 성공", type: "success" });
+        navigateTo("/profile");
+    }
+};
 </script>
+
+<style lang="scss" module>
+@use "@/assets/scss/utils.scss";
+
+.kakaoLogin {
+    margin-inline: auto;
+
+    @include utils.kakaoButton;
+}
+</style>

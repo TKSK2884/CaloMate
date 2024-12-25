@@ -23,6 +23,7 @@
                         회원가입
                     </NuxtLink>
                 </p>
+                <div @click="loginWithKakao" :class="$style.kakaoLogin" />
             </form>
         </UCard>
     </UContainer>
@@ -42,6 +43,9 @@ const formData: Ref<loginFormData> = ref({
     password: "",
 });
 
+const accessKey: string = config.public.kakaoAccessKey;
+const redirectURI: string = config.public.kakaoRedirectURI;
+
 onBeforeMount(async () => {
     await authStore.ensureAccessToken();
 
@@ -53,6 +57,12 @@ onBeforeMount(async () => {
 
 onMounted(() => {
     token.value = sessionStorage.getItem("token");
+
+    window.addEventListener("message", messageHandler);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("message", messageHandler);
 });
 
 const tryLogin = async () => {
@@ -105,4 +115,33 @@ const tryLogin = async () => {
         loading.value = false;
     }
 };
+
+const loginWithKakao = () => {
+    const url: string = `https://kauth.kakao.com/oauth/authorize?client_id=${accessKey}&redirect_uri=${redirectURI}&response_type=code`;
+
+    window.open(url, "", "width=600, height=600");
+};
+
+const messageHandler = (event: MessageEvent) => {
+    if (event.origin !== config.public.origin) return;
+
+    const message = event.data;
+
+    if (message.type === "LOGIN_SUCCESS") {
+        authStore.login(message.data);
+
+        ElMessage({ message: "로그인 성공", type: "success" });
+        navigateTo("/profile");
+    }
+};
 </script>
+
+<style lang="scss" module>
+@use "@/assets/scss/utils.scss";
+
+.kakaoLogin {
+    margin-inline: auto;
+
+    @include utils.kakaoButton;
+}
+</style>
