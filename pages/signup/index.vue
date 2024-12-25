@@ -1,5 +1,5 @@
 <template>
-    <UContainer class="mt-32">
+    <UContainer class="mt-16 sm:mt-32">
         <UCard class="max-w-md mx-auto bg-card p-8">
             <form @submit.prevent="trySignup">
                 <h2 class="text-2xl font-bold mb-6 text-center">회원가입</h2>
@@ -17,7 +17,7 @@
                 <UInput v-model="formData.nickname" required />
 
                 <UButton
-                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
+                    class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
                     :loading="loading"
                 >

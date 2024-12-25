@@ -1,5 +1,5 @@
 <template>
-    <UContainer class="mt-32">
+    <UContainer class="mt-16 sm:mt-32">
         <UCard class="max-w-md mx-auto bg-card p-8">
             <form @submit.prevent="tryLogin">
                 <h2 class="text-2xl font-bold mb-6 text-center">로그인</h2>
@@ -10,14 +10,14 @@
                 <UInput v-model="formData.password" required />
 
                 <UButton
-                    class="w-full bg-primary justify-center rounded-lg mt-4 text-primary-foreground hover:bg-primary/90 disabled:bg-primary"
+                    class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
                     :loading="loading"
                 >
                     로그인
                 </UButton>
 
-                <p class="mt-4 text-center text-sm text-muted-foreground">
+                <p class="my-4 text-center text-sm text-muted-foreground">
                     계정이 없으신가요?
                     <NuxtLink to="/signup" class="text-primary hover:underline">
                         회원가입

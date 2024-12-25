@@ -11,6 +11,8 @@
     --primary: #18181b;
     --primary-foreground: #ffffff;
 
+    --second: #16a34a;
+
     --secondary: #f4f4f5;
     --secondary-foreground: #1b1f23;
 
@@ -43,6 +45,8 @@
     --primary: #ffffff;
     --primary-foreground: #034d00;
 
+    --second: #ffffff;
+
     --secondary: #24292e;
     --secondary-foreground: #fefefe;
 
@@ -68,6 +72,16 @@ body {
 .secondary {
     background-color: var(--secondary);
     color: var(--secondary-foreground);
+}
+
+.bg-second,
+.dark .bg-second {
+    background-color: var(--second);
+    &:hover,
+    &:disabled {
+        background-color: var(--second);
+        opacity: 0.9;
+    }
 }
 
 .bg-primary,
