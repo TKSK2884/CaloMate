@@ -1,0 +1,14 @@
+// login & join kakaoButton
+@mixin kakaoButton {
+    width: 180px;
+    height: 40px;
+
+    background-image: url("@/assets/icon/kakao_login_medium.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

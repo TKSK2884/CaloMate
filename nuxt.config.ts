@@ -3,7 +3,10 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     runtimeConfig: {
         public: {
+            origin: process.env.VUE_APP_ORIGIN,
             apiBase: process.env.VUE_APP_API_URL || "http://localhost:8566",
+            kakaoAccessKey: process.env.VUE_APP_KAKAO_ACCESS_KEY,
+            kakaoRedirectURI: process.env.VUE_APP_KAKAO_REDIRECT_URI,
         },
     },
 
