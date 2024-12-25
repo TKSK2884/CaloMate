@@ -34,14 +34,14 @@
                 <div class="flex gap-4 mb-8">
                     <UButton
                         @click="clearResult"
-                        class="bg-primary text-primary-foreground hover:bg-primary/90"
+                        class="bg-second text-primary-foreground hover:bg-second/90"
                     >
                         다시하기
                     </UButton>
                     <UButton
                         v-if="!isLogin()"
                         @click="goLogin()"
-                        class="bg-primary text-primary-foreground hover:bg-primary/90"
+                        class="bg-second text-primary-foreground hover:bg-second/90"
                     >
                         로그인하고 결과 저장하기
                     </UButton>
