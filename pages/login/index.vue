@@ -1,5 +1,5 @@
 <template>
-    <UContainer class="mt-32">
+    <UContainer class="mt-16 sm:mt-32">
         <UCard class="max-w-md mx-auto bg-card p-8">
             <form @submit.prevent="tryLogin">
                 <h2 class="text-2xl font-bold mb-6 text-center">로그인</h2>
