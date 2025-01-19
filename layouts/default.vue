@@ -2,7 +2,7 @@
     <div>
         <header v-if="isHeader" class="secondary py-6">
             <div
-                class="container mx-auto px-4 flex justify-between items-center"
+                class="container mx-auto max-w-screen-lg px-4 flex justify-between items-center"
             >
                 <NuxtLink to="/">
                     <h1 class="text-2xl font-bold sm:text-3xl">CaloMate AI</h1>
