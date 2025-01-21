@@ -14,7 +14,9 @@
                     <br />
                     당신의 건강 목표를 달성하세요.
                 </div>
-                <NuxtLink to="/profile">
+                <NuxtLink
+                    :to="authStore.accessToken != null ? '/mypage' : '/profile'"
+                >
                     <UButton
                         class="bg-second text-primary-foreground hover:bg-second/90 px-8 py-3 rounded-full text-lg"
                     >
@@ -38,8 +40,4 @@ definePageMeta({
 });
 
 const authStore = useAuthStore();
-
-const isLogin = (): boolean => {
-    return authStore.accessToken != null;
-};
 </script>
