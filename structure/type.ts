@@ -47,7 +47,7 @@ export interface UserProfile {
 
 export interface MypageProfile {
     age: number;
-    gender: string;
+    gender: number;
     height: number;
     weight: number;
     activityLevel: string;
@@ -64,6 +64,7 @@ export interface MypageHistory {
 export interface LoginData {
     accessToken: string;
     user: UserInfo;
+    userProfile: UserProfile | null;
 }
 
 export enum KoreaTimeEnum {
