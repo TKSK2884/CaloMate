@@ -3,7 +3,7 @@
         <UCard class="max-w-md mx-auto">
             <form @submit.prevent="saveProfile">
                 <h2 class="text-2xl font-bold mb-6 text-center">
-                    프로필 {{ isLogin() ? "수정" : "입력" }}
+                    프로필 {{ isProfile() ? "수정" : "입력" }}
                 </h2>
                 <div class="mb-2">나이</div>
                 <UInput v-model="formData.age" type="number" />
@@ -94,8 +94,8 @@ onMounted(async () => {
     await checkProfile();
 });
 
-const isLogin = (): boolean => {
-    return authStore.accessToken != null;
+const isProfile = (): boolean => {
+    return authStore.userProfile != null;
 };
 
 const checkProfile = async () => {
@@ -204,10 +204,7 @@ const saveProfile = async () => {
             return;
         }
 
-        if (result.message != null) {
-            ElMessage({ message: result.message, type: "info" });
-            return;
-        }
+        ElMessage({ message: "프로필 설정 완료", type: "success" });
 
         if (result.data?.profileToken) {
             navigateTo({
