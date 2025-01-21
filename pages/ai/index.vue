@@ -1,5 +1,5 @@
 <template>
-    <UContainer>
+    <UContainer class="max-w-screen-lg">
         <h2 class="text-3xl font-bold my-6">AI 상담</h2>
         <UCard>
             <!-- 제목 -->
