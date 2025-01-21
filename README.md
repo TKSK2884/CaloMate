@@ -7,8 +7,8 @@
 ## 🚀 프로젝트 데모
 - [칼로메이트 데모 페이지](https://calomate.highground.kr/)
 
-<img src="https://github.com/user-attachments/assets/c9f5bd08-50ca-42df-8bb7-3530a343eca1" width="818px" height="933px">
-<img src="https://github.com/user-attachments/assets/3d23e556-cf5a-482a-8e4d-12489ef9e3fc" width="866px" height="659px">
+<img src="https://github.com/user-attachments/assets/159e52a7-c4bd-45e2-a133-19c0effc0ff6" width="960px" height="692px">
+<img src="https://github.com/user-attachments/assets/c8a537ec-c6d6-4fc7-b775-408ad6773c62" width="960px" height="851px">
 
 ## 🔧 사용 기술 스택
 Nuxt, TypeScript, TailWind CSS, Echarts
