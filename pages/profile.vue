@@ -217,6 +217,33 @@ const saveProfile = async () => {
             return;
         }
 
+        // 프로필 등록
+        if (
+            !(
+                "id" in formData.value.activityLevel &&
+                "id" in formData.value.target
+            )
+        ) {
+            return;
+        }
+
+        let userGender: string = "male";
+
+        if (formData.value.gender != 1) {
+            userGender = "female";
+        }
+
+        const convertedProfile: UserProfile = {
+            age: formData.value.age,
+            gender: userGender,
+            height: formData.value.height,
+            weight: formData.value.weight,
+            activityLevel: formData.value.activityLevel.id,
+            target: formData.value.target.id,
+        };
+
+        authStore.saveProfile(convertedProfile);
+
         navigateTo("/ai");
     } catch (error) {
         ElMessage({
