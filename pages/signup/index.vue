@@ -55,16 +55,14 @@ const formData: Ref<SignupFormData> = ref({
 const accessKey: string = config.public.kakaoAccessKey;
 const redirectURI: string = config.public.kakaoRedirectURI;
 
-onBeforeMount(async () => {
+onMounted(async () => {
     await authStore.ensureAccessToken();
 
     if (authStore.accessToken != null) {
         ElMessage({ message: "이미 로그인 되어있습니다.", type: "error" });
-        navigateTo("/profile");
+        navigateTo("/mypage");
     }
-});
 
-onMounted(() => {
     window.addEventListener("message", messageHandler);
 });
 
