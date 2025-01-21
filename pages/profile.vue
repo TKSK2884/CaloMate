@@ -226,13 +226,4 @@ const saveProfile = async () => {
         return;
     }
 };
-
-watch(
-    () => loadingStore.appInitial,
-    async (n) => {
-        if (n) {
-            await checkProfile();
-        }
-    }
-);
 </script>
