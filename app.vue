@@ -1,18 +1,18 @@
 <template>
-    <div>
-        <NuxtLayout>
+    <NuxtLayout>
+        <template v-if="!loading">
             <NuxtPage />
-        </NuxtLayout>
-
-        <div
-            v-if="loading"
-            class="fixed inset-0 flex items-center justify-center min-h-screen bg-white dark:bg-black"
-        >
+        </template>
+        <template v-else>
             <div
-                class="w-16 h-16 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin"
-            />
-        </div>
-    </div>
+                class="fixed inset-0 flex items-center justify-center min-h-screen bg-white dark:bg-black"
+            >
+                <div
+                    class="w-16 h-16 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin"
+                />
+            </div>
+        </template>
+    </NuxtLayout>
 </template>
 
 <script setup lang="ts">

@@ -1,51 +1,37 @@
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
 import type { RuntimeConfig } from "nuxt/schema";
-import type { APIResponse, LoginData } from "~/structure/type";
-
-interface UserState {
-    id: number;
-    nickname: string;
-}
+import type {
+    APIResponse,
+    LoginData,
+    UserInfo,
+    UserProfile,
+} from "~/structure/type";
 
 export const useAuthStore = defineStore("user", () => {
     const config: RuntimeConfig = useRuntimeConfig();
 
-    const user: Ref<UserState | null> = ref(null);
     const accessToken: Ref<string | null> = ref(null);
+    const user: Ref<UserInfo | null> = ref(null);
+    const userProfile: Ref<UserProfile | null> = ref(null);
 
     const login = async (item: LoginData) => {
         accessToken.value = item.accessToken;
         user.value = item.user;
-    };
-
-    const restoreAuthState = async () => {
-        const result: APIResponse<{ accessToken: string }> = await $fetch(
-            "/auth/refresh",
-            {
-                baseURL: config.public.apiBase,
-                method: "POST",
-                credentials: "include",
-            }
-        );
-
-        if (!result.success) {
-            accessToken.value = null;
-            return;
-        }
-        accessToken.value = result.data.accessToken;
+        userProfile.value = item.userProfile;
     };
 
     const refreshAccessToken = async () => {
         try {
-            const result: APIResponse<{ accessToken: string }> = await $fetch(
-                "/auth/refresh",
-                {
-                    baseURL: config.public.apiBase,
-                    method: "POST",
-                    credentials: "include", // 쿠키로 리프레시 토큰 전송
-                }
-            );
+            const result: APIResponse<{
+                accessToken: string;
+                user: UserInfo;
+                userProfile: UserProfile;
+            }> = await $fetch("/auth/refresh", {
+                baseURL: config.public.apiBase,
+                method: "POST",
+                credentials: "include", // 쿠키로 리프레시 토큰 전송
+            });
 
             if (!result.success) {
                 logout(); // 리프레시 토큰도 만료된 경우 로그아웃 처리
@@ -57,8 +43,9 @@ export const useAuthStore = defineStore("user", () => {
             }
 
             accessToken.value = result.data.accessToken;
+            user.value = result.data.user;
+            userProfile.value = result.data.userProfile;
         } catch (error) {
-            console.error("액세스 토큰 갱신 실패:", error);
             logout();
         }
     };
@@ -74,7 +61,6 @@ export const useAuthStore = defineStore("user", () => {
 
     const ensureAccessToken = async () => {
         if (isAccessTokenExpired()) {
-            console.log("액세스 토큰 만료: 갱신 요청");
             await refreshAccessToken();
         }
     };
@@ -95,13 +81,18 @@ export const useAuthStore = defineStore("user", () => {
         }
     };
 
+    const saveProfile = (item: UserProfile) => {
+        userProfile.value = item;
+    };
+
     return {
-        user,
         accessToken,
+        user,
+        userProfile,
         login,
         refreshAccessToken,
-        restoreAuthState,
         ensureAccessToken,
         logout,
+        saveProfile,
     };
 });

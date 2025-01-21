@@ -1,5 +1,5 @@
 <template>
-    <UContainer>
+    <UContainer class="max-w-screen-lg">
         <h2 class="text-3xl font-bold my-6">AI 상담</h2>
         <UCard>
             <!-- 제목 -->
@@ -20,10 +20,14 @@
                     전송
                 </UButton>
 
-                <div class="mt-4 opacity-50">
-                    - 프로필 미입력시 프로필을 먼저 입력해주세요
+                <div
+                    v-if="authStore.accessToken != null"
+                    class="mt-2 opacity-50"
+                >
+                    - 상담 내역은 마이페이지에서 확인할 수 있습니다.
                 </div>
-                <div class="mt-2 opacity-50">
+
+                <div v-else class="mt-2 opacity-50">
                     - 로그인시 상담 내역이 저장됩니다.
                 </div>
             </template>
@@ -81,7 +85,7 @@ onMounted(() => {
         token.value = typeof queryToken === "string" ? queryToken : null;
     }
 
-    if (authStore.accessToken == null && route.query.token == null) {
+    if (authStore.userProfile == null && route.query.token == null) {
         ElMessage({
             message: "프로필을 먼저 입력해주세요",
             type: "warning",

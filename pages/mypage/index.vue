@@ -1,21 +1,56 @@
 <template>
-    <UContainer>
-        <UCard class="mt-16">
+    <UContainer class="max-w-screen-lg">
+        <UCard class="my-16">
             <el-menu
                 :default-active="activeIndex"
                 class="el-menu !bg-transparent my-2"
                 mode="horizontal"
                 @select="selectMenu"
             >
-                <el-menu-item class="!text-inherit" index="1">
-                    이전 상담 내역
-                </el-menu-item>
-                <el-menu-item class="!text-inherit" index="2">
-                    몸무게 추세
-                </el-menu-item>
+                <el-menu-item index="1"> 몸무게 추세 </el-menu-item>
+                <el-menu-item index="2"> 이전 상담 내역 </el-menu-item>
             </el-menu>
             <template v-if="!loading">
                 <template v-if="activeIndex == '1'">
+                    <div class="text-2xl font-bold my-4">몸무게 추세</div>
+                    <template v-if="authStore.userProfile != null">
+                        <div class="my-2 opacity-50">
+                            프로필 정보를 업데이트 할때마다 몸무게 추세에
+                            반영됩니다.
+                        </div>
+                        <div ref="chart" style="width: 100%; height: 400px" />
+
+                        <div class="mb-2 opacity-50">몸무게 입력(kg)</div>
+                        <div class="flex mb-4">
+                            <UInput
+                                v-model="weight"
+                                class="mr-4"
+                                type="number"
+                            />
+                            <UButton
+                                class="bg-second text-primary-foreground hover:bg-second/90"
+                                @click="saveWeightInfo"
+                                >입력</UButton
+                            >
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="my-2 opacity-50">
+                            프로필이 등록되지 않았습니다. 프로필을 먼저 등록해
+                            주세요.
+                        </div>
+
+                        <NuxtLink to="/profile">
+                            <UButton
+                                class="bg-second text-primary-foreground hover:bg-second/90"
+                            >
+                                프로필 등록하러 가기
+                            </UButton>
+                        </NuxtLink>
+                    </template>
+                </template>
+
+                <template v-else>
                     <div class="text-2xl font-bold my-4">이전 상담 내역</div>
                     <div class="my-2 opacity-50">
                         이전 상담내역은 최근순으로 5개까지 표시됩니다.
@@ -55,15 +90,6 @@
                         </UCard>
                     </template>
                 </template>
-
-                <template v-else>
-                    <div class="text-2xl font-bold my-4">몸무게 추세</div>
-                    <div class="my-2 opacity-50">
-                        프로필 정보를 업데이트 할때마다 몸무게 추세에
-                        반영됩니다.
-                    </div>
-                    <div ref="chart" style="width: 100%; height: 400px" />
-                </template>
             </template>
             <template v-else>
                 <div class="flex items-center justify-center min-h-32">
@@ -91,7 +117,7 @@ const config: RuntimeConfig = useRuntimeConfig();
 const authStore = useAuthStore();
 const loadingStore = useLoadingStore();
 
-const loading: Ref<boolean> = ref(true);
+const loading: Ref<boolean> = ref(false);
 
 const { $echarts } = useNuxtApp();
 const chart: Ref<HTMLDivElement | null> = ref(null);
@@ -103,6 +129,7 @@ const YAxisData: Ref<number[] | undefined> = ref(undefined);
 const activeIndex: Ref<string> = ref("1");
 const historyList: Ref<MypageHistory[]> = ref([]);
 const activeContent: Ref<number> = ref(-1);
+const weight: Ref<number> = ref(0);
 
 const selectMenu = async (key: string) => {
     activeIndex.value = key;
@@ -117,8 +144,12 @@ const selectContent = (index: number) => {
 };
 
 onMounted(async () => {
-    if (authStore?.accessToken == null) return;
-    await fetchMypageHistory();
+    if (authStore.accessToken == null) {
+        ElMessage({ message: "로그인이 필요합니다.", type: "warning" });
+
+        navigateTo("/login");
+    }
+    await fetchMypageProfile();
 });
 
 const fetchMypageHistory = async () => {
@@ -164,7 +195,48 @@ const fetchMypageProfile = async () => {
         YAxisData.value = result.data.map((item) => {
             return item.weight;
         });
+
+        if (YAxisData.value != null) {
+            const lastValue: number | undefined = YAxisData.value.at(-1);
+            if (lastValue != null) {
+                weight.value = lastValue;
+            }
+        }
     } catch (error) {
+        return;
+    }
+};
+
+const saveWeightInfo = async () => {
+    if (weight.value == null || weight.value < 1) {
+        ElMessage({ message: "올바른 체중을 입력해주세요", type: "warning" });
+        return;
+    }
+
+    if (XAxisData.value == null || YAxisData.value == null) {
+        return;
+    }
+
+    try {
+        const result: APIResponse<null> = await $fetch("/mypage/save", {
+            baseURL: config.public.apiBase,
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${authStore.accessToken}`,
+            },
+            body: {
+                weight: weight.value,
+            },
+        });
+
+        // 차트에 데이터를 선 반영
+        const now = new Date();
+
+        XAxisData.value.push(convertKoreaTime(now));
+        YAxisData.value.push(weight.value);
+
+        YAxisData.value = [...YAxisData.value];
+    } catch {
         return;
     }
 };
@@ -173,20 +245,7 @@ watch(
     () => authStore.accessToken,
     async (n) => {
         if (n != null) {
-            await fetchMypageHistory();
-        }
-    }
-);
-
-watch(
-    () => loadingStore.appInitial,
-    (n) => {
-        if (n) {
-            if (authStore.accessToken == null) {
-                ElMessage({ message: "로그인이 필요합니다.", type: "warning" });
-
-                navigateTo("/login");
-            }
+            await fetchMypageProfile();
         }
     }
 );
@@ -196,7 +255,9 @@ watch(
     (n) => {
         if (n != null) {
             if (chart.value) {
-                myChart = $echarts.init(chart.value);
+                if (!myChart) {
+                    myChart = $echarts.init(chart.value);
+                }
             }
 
             if (myChart) {
@@ -231,9 +292,22 @@ watch(
 watch(
     () => activeIndex.value,
     async (n) => {
-        if (n == "2") {
+        if (n == "1") {
             await fetchMypageProfile();
+        }
+
+        if (n == "2") {
+            await fetchMypageHistory();
+            myChart = null;
         }
     }
 );
 </script>
+
+<style lang="scss" module>
+:global(.el-menu--horizontal) {
+    > :global(.el-menu-item) {
+        color: inherit;
+    }
+}
+</style>
