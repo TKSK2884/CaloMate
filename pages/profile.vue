@@ -30,6 +30,7 @@
                 <UButton
                     class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
+                    :loading="loading"
                 >
                     프로필 저장
                 </UButton>
@@ -55,6 +56,8 @@ const loadingStore = useLoadingStore();
 definePageMeta({
     title: "프로필 설정",
 });
+
+const loading: Ref<boolean> = ref(false);
 
 const formData: Ref<ProfileFormData> = ref({
     age: 20,
@@ -185,6 +188,8 @@ const saveProfile = async () => {
     }
 
     try {
+        loading.value = true;
+
         const result: APIResponse<{ profileToken: string } | null> =
             await $fetch("/profile/save", {
                 baseURL: config.public.apiBase,
@@ -194,6 +199,8 @@ const saveProfile = async () => {
                 },
                 body: formData.value,
             });
+
+        loading.value = false;
 
         if (!result.success) {
             ElMessage({
@@ -246,6 +253,8 @@ const saveProfile = async () => {
 
         navigateTo("/ai");
     } catch (error) {
+        loading.value = false;
+
         ElMessage({
             message: "프로필 등록에 실패하였습니다. 다시 시도해주세요",
             type: "error",
