@@ -38,7 +38,6 @@
                             반영됩니다.
                         </div>
                         <div ref="chart" style="width: 100%; height: 400px" />
-
                         <div class="mb-2 opacity-50">몸무게 입력(kg)</div>
                         <div class="flex mb-4">
                             <UInput
@@ -47,11 +46,20 @@
                                 type="number"
                             />
                             <UButton
-                                class="bg-second text-primary-foreground hover:bg-second/90"
                                 @click="saveWeightInfo"
-                                >입력</UButton
+                                class="bg-second text-primary-foreground hover:bg-second/90"
                             >
+                                입력
+                            </UButton>
                         </div>
+                        <div class="text-2xl font-bold my-4">
+                            주간 식단 이행률
+                        </div>
+                        <div class="my-2 opacity-50">
+                            추천 식단을 완료할때마다 주간 식단 이행률에
+                            반영됩니다.
+                        </div>
+                        <div ref="chart2" style="width: 100%; height: 400px" />
                     </template>
                     <template v-else>
                         <div class="my-2 opacity-50">
@@ -82,8 +90,8 @@
                             class="mb-4 secondary rounded-lg dark:secondary"
                         >
                             <div
-                                class="cursor-pointer"
                                 @click="selectContent(index)"
+                                class="cursor-pointer mb-2"
                             >
                                 <div class="text-xl font-bold">
                                     {{
@@ -92,10 +100,6 @@
                                             KoreaTimeEnum.Day
                                         )
                                     }}
-                                </div>
-
-                                <div class="text-xl font-bold">
-                                    {{ item.question }}
                                 </div>
                             </div>
 
@@ -171,6 +175,7 @@ import type {
     APIResponse,
     MypageHistory,
     MypageProfile,
+    WeekdayStats,
 } from "~/structure/type";
 import { KoreaTimeEnum } from "@/structure/type";
 
@@ -182,26 +187,30 @@ const loadingStore = useLoadingStore();
 const loading: Ref<boolean> = ref(false);
 
 const { $echarts } = useNuxtApp();
+
 const chart: Ref<HTMLDivElement | null> = ref(null);
+const chart2: Ref<HTMLDivElement | null> = ref(null);
+
 let myChart: echarts.ECharts | null = null;
+let myChart2: echarts.ECharts | null = null;
 
 const XAxisData: Ref<string[] | undefined> = ref(undefined);
 const YAxisData: Ref<number[] | undefined> = ref(undefined);
+
+const XAxisData2: Ref<string[] | undefined> = ref(undefined);
+const YAxisData2: Ref<number[] | undefined> = ref(undefined);
 
 const activeIndex: Ref<string> = ref("1");
 const historyList: Ref<MypageHistory[]> = ref([]);
 const activeContent: Ref<number> = ref(-1);
 const weight: Ref<number> = ref(0);
 
-const selectMenu = async (key: string) => {
-    activeIndex.value = key;
-};
-
 const selectContent = (index: number) => {
     if (activeContent.value == index) {
         activeContent.value = -1;
         return;
     }
+
     activeContent.value = index;
 };
 
@@ -211,7 +220,8 @@ onMounted(async () => {
 
         navigateTo("/login");
     }
-    await fetchMypageProfile();
+
+    await fetchDashboard();
 });
 
 const fetchMypageHistory = async () => {
@@ -269,6 +279,24 @@ const fetchMypageProfile = async () => {
     }
 };
 
+const fetchMypageChart = async () => {
+    const result: APIResponse<WeekdayStats[]> = await $fetch("/mypage/chart", {
+        baseURL: config.public.apiBase,
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${authStore.accessToken}`,
+        },
+    });
+
+    XAxisData2.value = result.data.map((item) => {
+        return item.date;
+    });
+
+    YAxisData2.value = result.data.map((item) => {
+        return item.rate;
+    });
+};
+
 const saveWeightInfo = async () => {
     if (weight.value == null || weight.value < 1) {
         ElMessage({ message: "올바른 체중을 입력해주세요", type: "warning" });
@@ -296,6 +324,10 @@ const saveWeightInfo = async () => {
 
         XAxisData.value.push(convertKoreaTime(now));
         YAxisData.value.push(weight.value);
+
+        if (authStore.userProfile != null) {
+            authStore.userProfile.weight = weight.value;
+        }
 
         YAxisData.value = [...YAxisData.value];
     } catch {
@@ -352,24 +384,58 @@ watch(
 );
 
 watch(
+    () => YAxisData2.value,
+    (n) => {
+        if (n != null) {
+            if (chart2.value) {
+                if (!myChart2) {
+                    myChart2 = $echarts.init(chart2.value);
+                }
+            }
+
+            if (myChart2) {
+                const option: EChartsOption = {
+                    xAxis: {
+                        type: "category",
+                        data: XAxisData2.value,
+                    },
+                    yAxis: {
+                        type: "value",
+                    },
+                    series: [
+                        {
+                            data: n,
+                            type: "bar",
+                            showBackground: true,
+                            backgroundStyle: {
+                                color: "rgba(180, 180, 180, 0.2)",
+                            },
+                        },
+                    ],
+                };
+                myChart2.setOption(option, { notMerge: true });
+            }
+        }
+    }
+);
+
+const fetchDashboard = async () => {
+    await fetchMypageChart();
+    await fetchMypageProfile();
+};
+
+watch(
     () => activeIndex.value,
     async (n) => {
         if (n == "1") {
-            await fetchMypageProfile();
+            await fetchDashboard();
         }
 
         if (n == "2") {
             await fetchMypageHistory();
             myChart = null;
+            myChart2 = null;
         }
     }
 );
 </script>
-
-<style lang="scss" module>
-:global(.el-menu--horizontal) {
-    > :global(.el-menu-item) {
-        color: inherit;
-    }
-}
-</style>
