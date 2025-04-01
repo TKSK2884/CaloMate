@@ -1,30 +1,48 @@
 <template>
     <UContainer class="max-w-screen-lg">
-        <h2 class="text-3xl font-bold my-6">AI 상담</h2>
+        <h2 class="text-3xl font-bold my-6">오늘의 식단 추천</h2>
         <UCard>
             <!-- 제목 -->
-            <div class="text-2xl font-bold mb-4">CaloMate AI와 상담하기</div>
+            <div class="text-2xl font-bold mb-4">
+                CaloMate AI 에게 추천 받기
+            </div>
 
             <!-- 상담 입력폼 -->
-            <template v-if="!loading && generateResult == null">
-                <UTextarea
-                    v-model="textArea"
-                    class="mb-4"
-                    placeholder="상담받을 내용을 입력해주세요"
-                />
+            <template
+                v-if="!loading && resultDiet == null && resultWorkout == null"
+            >
+                <!-- 현재 프로필 정보 -->
+                <template v-if="userProfile != null">
+                    <div class="text-xl font-semibold mb-2">
+                        현재 프로필 정보
+                    </div>
+
+                    <ul class="text-sm space-y-1 mb-4">
+                        <li>나이: {{ userProfile.age }}</li>
+                        <li>
+                            성별:
+                            {{ getGenderText() }}
+                        </li>
+                        <li>키: {{ userProfile.height }} cm</li>
+                        <li>몸무게: {{ userProfile.weight }} kg</li>
+                        <li>활동 수준: {{ getActivityText() }}</li>
+                        <li>목표: {{ getTargetText() }}</li>
+                    </ul>
+                </template>
+
                 <UButton
-                    @click="sendText()"
+                    @click="getResult()"
                     :loading="loading"
                     class="bg-second text-primary-foreground hover:bg-second/90"
                 >
-                    전송
+                    추천 받기
                 </UButton>
 
                 <div
                     v-if="authStore.accessToken != null"
                     class="mt-2 opacity-50"
                 >
-                    - 상담 내역은 마이페이지에서 확인할 수 있습니다.
+                    - 추천 내역은 마이페이지에서 확인할 수 있습니다.
                 </div>
 
                 <div v-else class="mt-2 opacity-50">
