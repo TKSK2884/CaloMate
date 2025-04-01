@@ -359,9 +359,27 @@ const getResult = async () => {
     }
 };
 
-const clearResult = () => {
-    textArea.value = "";
-    generateResult.value = null;
+const clearResult = async () => {
+    resultDiet.value = null;
+    resultWorkout.value = null;
+
+    checkedItems.value = [];
+
+    if (resultId.value != null) {
+        const result: APIResponse<null> = await $fetch("/diet/log", {
+            baseURL: config.public.apiBase,
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${authStore.accessToken}`,
+            },
+            body: {
+                date: new Date().toISOString().split("T")[0],
+                resultId: resultId.value ?? null,
+            },
+        });
+
+        resultId.value = null;
+    }
 };
 
 const goLogin = () => {
