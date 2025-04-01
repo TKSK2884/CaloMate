@@ -263,28 +263,90 @@ const isLogin = (): boolean => {
     return authStore.accessToken != null;
 };
 
-const sendText = async () => {
-    if (textArea.value.trim() == "") {
-        ElMessage({ message: "상담받을 내용을 입력해주세요", type: "warning" });
-        return;
-    }
-
+const getProfileByToken = async () => {
     try {
         loading.value = true;
-        const result: APIResponse<string> = await $fetch("/generate/support", {
+        const result: APIResponse<UserProfile> = await $fetch(
+            "/profile/token",
+            {
+                baseURL: config.public.apiBase,
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${authStore.accessToken}`,
+                },
+                query: {
+                    token: token.value,
+                },
+            }
+        );
+
+        userProfile.value = result.data;
+    } catch (error) {
+        ElMessage({
+            message: "프로필 로드중 에러가 발생. 다시 시도해주세요",
+            type: "error",
+        });
+    } finally {
+        loading.value = false;
+    }
+};
+
+const getUserDiet = async () => {
+    try {
+        loading.value = true;
+
+        const result: APIResponse<{
+            diet: Meal[];
+            workout: string[];
+            resultId: number | null;
+        }> = await $fetch("/diet/check", {
+            baseURL: config.public.apiBase,
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${authStore.accessToken}`,
+            },
+        });
+
+        if (result.data != null) {
+            resultDiet.value = result.data.diet;
+            resultWorkout.value = result.data.workout;
+
+            if (result.data.resultId != null) {
+                resultId.value = result.data.resultId;
+            }
+        }
+    } catch (error) {
+        console.error("식단 가져오기중 에러", error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+const getResult = async () => {
+    try {
+        loading.value = true;
+        const result: APIResponse<{
+            diet: Meal[];
+            workout: string[];
+            resultId: number | null;
+        }> = await $fetch("/generate/support", {
             baseURL: config.public.apiBase,
             method: "POST",
             headers: {
                 Authorization: `Bearer ${authStore.accessToken}`,
             },
             body: {
-                text: textArea.value,
                 token: token.value,
             },
         });
 
         if (result.data != null) {
-            generateResult.value = convertReplacedText(result.data);
+            resultDiet.value = result.data.diet;
+            resultWorkout.value = result.data.workout;
+
+            if (result.data.resultId != null) {
+                resultId.value = result.data.resultId;
+            }
         }
     } catch (error) {
         ElMessage({
