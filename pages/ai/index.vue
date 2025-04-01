@@ -51,15 +51,72 @@
             </template>
 
             <!-- 결과 -->
-            <template v-if="!loading && generateResult != null">
-                <div class="mb-8" v-html="generateResult" />
+            <template
+                v-if="!loading && resultDiet != null && resultWorkout != null"
+            >
+                <!-- 식단 추천 -->
+                <div class="mb-6">
+                    <div class="text-xl font-semibold mb-4">
+                        🍽 오늘의 식단 추천
+                    </div>
+
+                    <div class="grid gap-4 md:grid-cols-3">
+                        <div
+                            v-for="(item, index) in resultDiet"
+                            :key="'result-' + index"
+                            :class="[
+                                'border border-gray-200 rounded-xl p-4 shadow-sm',
+                                item.checked ? 'bg-green-50' : 'bg-white',
+                            ]"
+                        >
+                            <div class="font-bold text-gray-700 text-base mb-2">
+                                {{ item.meal }}
+                            </div>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>칼로리: {{ item.calories }} kcal</li>
+                                <li>탄수화물: {{ item.carbs }}g</li>
+                                <li>단백질: {{ item.protein }}g</li>
+                                <li>지방: {{ item.fat }}g</li>
+                            </ul>
+                            <UCheckbox
+                                v-if="isLogin()"
+                                v-model="item.checked"
+                                @change="onDietCheck(item, index)"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 운동 추천 -->
+                <div class="mb-8">
+                    <div class="text-xl font-semibold mb-4">
+                        💪 오늘의 운동 추천
+                    </div>
+                    <ul
+                        class="list-disc pl-6 text-gray-800 border border-gray-200 rounded-xl p-4 shadow-sm bg-white"
+                    >
+                        <li
+                            v-for="(workout, idx) in resultWorkout"
+                            :key="'workout-' + idx"
+                        >
+                            {{ workout }}
+                        </li>
+                    </ul>
+                </div>
                 <div class="flex gap-4 mb-8">
+                    <!-- <UButton
+                        class="bg-second text-primary-foreground hover:bg-second/90"
+                    >
+                        저장하기
+                    </UButton> -->
                     <UButton
                         @click="clearResult"
                         class="bg-second text-primary-foreground hover:bg-second/90"
                     >
                         다시하기
                     </UButton>
+
                     <UButton
                         v-if="!isLogin()"
                         @click="goLogin()"
