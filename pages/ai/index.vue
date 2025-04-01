@@ -240,6 +240,17 @@ onMounted(() => {
 
         navigateTo("/profile");
     }
+
+    if (route.query.token != null) {
+        getProfileByToken();
+        return;
+    }
+
+    if (authStore.userProfile != null) {
+        userProfile.value = authStore.userProfile;
+
+        getUserDiet();
+    }
 });
 
 onBeforeUnmount(() => {
