@@ -142,17 +142,89 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/auth";
-import { convertReplacedText } from "~/utils/string";
-import type { APIResponse } from "~/structure/type";
+import type {
+    AIResponse,
+    APIResponse,
+    Meal,
+    UserProfile,
+} from "~/structure/type";
 
 const config = useRuntimeConfig();
 const route = useRoute();
 const authStore = useAuthStore();
 
 const loading: Ref<boolean> = ref(false);
-const textArea: Ref<string> = ref("");
 const token: Ref<string | null> = ref(null);
-const generateResult: Ref<string | null> = ref(null);
+// const generateResult: Ref<AIResponse | null> = ref(null);
+const resultDiet: Ref<Meal[] | null> = ref(null);
+const resultWorkout: Ref<string[] | null> = ref(null);
+
+const userProfile: Ref<UserProfile | null> = ref(null);
+const checkedItems = ref<boolean[]>([]);
+const resultId: Ref<number | null> = ref(null);
+
+const getGenderText = (): string => {
+    if (userProfile.value == null) return "";
+
+    const map = {
+        male: "남성",
+        female: "여성",
+    };
+
+    return (
+        map[userProfile.value.gender as keyof typeof map] ??
+        userProfile.value.gender
+    );
+};
+
+const getActivityText = (): string => {
+    if (userProfile.value == null) return "";
+
+    const map = {
+        sedentary: "거의 운동하지 않음",
+        light: "가벼운 운동",
+        moderate: "중간 수준 운동",
+        active: "활발한 운동",
+        very_active: "매우 활발한 운동",
+    };
+
+    return (
+        map[userProfile.value.activityLevel as keyof typeof map] ??
+        userProfile.value.activityLevel
+    );
+};
+
+const getTargetText = (): string => {
+    if (userProfile.value == null) return "";
+
+    const map = {
+        lose_weight: "체중 감량",
+        maintain: "체중 유지",
+        gain_muscle: "근육 증가",
+    };
+
+    return (
+        map[userProfile.value.target as keyof typeof map] ??
+        userProfile.value.target
+    );
+};
+
+const onDietCheck = async (item: Meal, index: number) => {
+    await $fetch("/diet/log", {
+        baseURL: config.public.apiBase,
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${authStore.accessToken}`,
+        },
+        body: {
+            meal: item.meal,
+            date: new Date().toISOString().split("T")[0],
+            checked: item.checked,
+        },
+    });
+
+    console.log("저장 완료");
+};
 
 onMounted(() => {
     if (route.query.token != null) {
