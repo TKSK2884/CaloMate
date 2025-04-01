@@ -70,9 +70,9 @@
                 </template>
 
                 <template v-else>
-                    <div class="text-2xl font-bold my-4">이전 상담 내역</div>
+                    <div class="text-2xl font-bold my-4">이전 추천 내역</div>
                     <div class="my-2 opacity-50">
-                        이전 상담내역은 최근순으로 5개까지 표시됩니다.
+                        추천 내역은 최근순으로 5개까지 표시됩니다.
                     </div>
 
                     <template v-if="historyList.length > 0">
