@@ -17,7 +17,7 @@
                             프로필
                         </NuxtLink>
                         <NuxtLink to="/ai" class="text-primary hover:underline">
-                            AI 상담
+                            오늘의 식단
                         </NuxtLink>
                         <NuxtLink
                             to="/mypage"
@@ -52,7 +52,7 @@
 
                     <ThemeToggle />
                 </div>
-                <div class="flex items-center block sm:hidden">
+                <div class="flex items-center sm:hidden">
                     <UButton
                         @click="toggleMenu"
                         icon="i-heroicons-bars-4"
@@ -87,7 +87,7 @@
                         color="white"
                         variant="link"
                         class="w-full min-h-16 block"
-                        >AI상담</UButton
+                        >오늘의 식단</UButton
                     >
                 </NuxtLink>
                 <NuxtLink to="/mypage">

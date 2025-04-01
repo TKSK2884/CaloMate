@@ -70,3 +70,25 @@ export interface LoginData {
 export enum KoreaTimeEnum {
     Day = "day",
 }
+
+export interface Meal {
+    meal: string;
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+
+    checked: boolean;
+}
+
+export interface AIResponse {
+    diet: Meal[];
+    workout: string[];
+}
+
+export interface WeekdayStats {
+    date: string;
+    total: number;
+    completed: number;
+    rate: number;
+}

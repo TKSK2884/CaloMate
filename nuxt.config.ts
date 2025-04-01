@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
+
     runtimeConfig: {
         public: {
             origin: process.env.VUE_APP_ORIGIN,
@@ -31,4 +32,5 @@ export default defineNuxtConfig({
     },
 
     css: ["~/assets/css/main.css", "@/assets/css/global.css"],
+    compatibilityDate: "2025-03-20",
 });
