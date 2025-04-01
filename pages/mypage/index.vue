@@ -104,8 +104,51 @@
                                     activeContent != -1 &&
                                     activeContent == index
                                 "
-                                v-html="convertReplacedText(item.content)"
-                            />
+                                class="transition-all"
+                            >
+                                <div class="grid gap-4 md:grid-cols-3">
+                                    <div
+                                        v-for="(i, index) in JSON.parse(
+                                            item.content
+                                        ).diet"
+                                        :key="'result-' + index"
+                                        class="border border-gray-200 rounded-xl p-4 shadow-sm bg-white"
+                                    >
+                                        <div
+                                            class="font-bold text-gray-700 text-base mb-2"
+                                        >
+                                            {{ i.meal }}
+                                        </div>
+                                        <ul
+                                            class="text-sm text-gray-700 space-y-1"
+                                        >
+                                            <li>
+                                                칼로리: {{ i.calories }} kcal
+                                            </li>
+                                            <li>탄수화물: {{ i.carbs }}g</li>
+                                            <li>단백질: {{ i.protein }}g</li>
+                                            <li>지방: {{ i.fat }}g</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-8">
+                                    <div class="text-xl font-semibold mb-4">
+                                        운동 추천
+                                    </div>
+                                    <ul
+                                        class="list-disc pl-6 text-gray-800 border border-gray-200 rounded-xl p-4 shadow-sm bg-white"
+                                    >
+                                        <li
+                                            v-for="(workout, idx) in JSON.parse(
+                                                item.content
+                                            ).workout"
+                                            :key="'workout-' + idx"
+                                        >
+                                            {{ workout }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </UCard>
                     </template>
                 </template>
