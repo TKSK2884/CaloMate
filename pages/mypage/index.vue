@@ -1,15 +1,34 @@
 <template>
     <UContainer class="max-w-screen-lg">
         <UCard class="my-16">
-            <el-menu
-                :default-active="activeIndex"
-                class="el-menu !bg-transparent my-2"
-                mode="horizontal"
-                @select="selectMenu"
+            <!-- TabsList -->
+            <div
+                class="grid grid-cols-2 w-full mb-4 border rounded-xl overflow-hidden"
             >
-                <el-menu-item index="1"> 몸무게 추세 </el-menu-item>
-                <el-menu-item index="2"> 이전 상담 내역 </el-menu-item>
-            </el-menu>
+                <button
+                    :class="[
+                        'px-4 py-2 text-center text-sm font-medium transition-colors',
+                        activeIndex === '1'
+                            ? 'bg-second text-primary-foreground'
+                            : 'text-primary',
+                    ]"
+                    @click="activeIndex = '1'"
+                >
+                    대시 보드
+                </button>
+
+                <button
+                    :class="[
+                        'px-4 py-2 text-center text-sm font-medium transition-colors',
+                        activeIndex === '2'
+                            ? 'bg-second text-primary-foreground'
+                            : 'text-primary',
+                    ]"
+                    @click="activeIndex = '2'"
+                >
+                    이전 추천 내역
+                </button>
+            </div>
             <template v-if="!loading">
                 <template v-if="activeIndex == '1'">
                     <div class="text-2xl font-bold my-4">몸무게 추세</div>
