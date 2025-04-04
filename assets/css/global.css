@@ -11,6 +11,8 @@
     --primary: #18181b;
     --primary-foreground: #ffffff;
 
+    --primary-second: #18181b;
+
     --second: #16a34a;
 
     --secondary: #f4f4f5;
@@ -44,6 +46,8 @@
 
     --primary: #ffffff;
     --primary-foreground: #034d00;
+
+    --primary-second: #18181b;
 
     --second: #ffffff;
 
@@ -106,6 +110,12 @@ body {
     color: var(--muted-foreground);
 }
 
-.text-primary {
+.text-primary,
+.dark .text-primary {
     color: var(--primary);
+}
+
+.text-primary-second,
+.dark .text-primary-second {
+    color: var(--primary-second);
 }
