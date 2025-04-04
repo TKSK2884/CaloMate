@@ -1,58 +1,49 @@
 <template>
     <div>
-        <header v-if="isHeader" class="secondary py-6">
+        <header v-if="isHeader" class="bg-white shadow py-4 top-0 z-50">
             <div
                 class="container mx-auto max-w-screen-lg px-4 flex justify-between items-center"
             >
-                <NuxtLink to="/">
-                    <h1 class="text-2xl font-bold sm:text-3xl">CaloMate AI</h1>
+                <!-- 로고 -->
+                <NuxtLink to="/" class="flex items-center space-x-2">
+                    <h1 class="text-3xl font-black tracking-tight">
+                        <span class="text-green-500">Calo</span>Mate<span
+                            class="text-sm"
+                        >
+                            AI
+                        </span>
+                    </h1>
                 </NuxtLink>
 
-                <div class="items-center space-x-5 hidden sm:flex">
+                <nav class="hidden sm:flex items-center space-x-6">
                     <template v-if="isLogin()">
-                        <NuxtLink
-                            to="/profile"
-                            class="text-primary hover:underline"
+                        <NuxtLink to="/profile" class="nav-link"
+                            >프로필</NuxtLink
                         >
-                            프로필
-                        </NuxtLink>
-                        <NuxtLink to="/ai" class="text-primary hover:underline">
-                            오늘의 식단
-                        </NuxtLink>
-                        <NuxtLink
-                            to="/mypage"
-                            class="text-primary hover:underline"
+                        <NuxtLink to="/ai" class="nav-link"
+                            >오늘의 식단</NuxtLink
                         >
-                            마이페이지
-                        </NuxtLink>
-                        <div
-                            @click="logout"
-                            class="text-primary hover:underline cursor-pointer"
+                        <NuxtLink to="/mypage" class="nav-link"
+                            >마이페이지</NuxtLink
                         >
+                        <div @click="logout" class="nav-link cursor-pointer">
                             로그아웃
                         </div>
                     </template>
 
                     <template v-else>
-                        <NuxtLink
-                            to="/login"
-                            class="text-primary hover:underline"
-                        >
-                            로그인
-                        </NuxtLink>
-
+                        <NuxtLink to="/login" class="nav-link">로그인</NuxtLink>
                         <NuxtLink to="/signup">
                             <UButton
-                                class="bg-primary text-primary-foreground hover:bg-primary/90"
+                                class="bg-primary text-white hover:bg-primary/90"
                             >
                                 회원가입
                             </UButton>
                         </NuxtLink>
                     </template>
+                </nav>
 
-                    <ThemeToggle />
-                </div>
-                <div class="flex items-center sm:hidden">
+                <div class="flex sm:hidden">
                     <UButton
                         @click="toggleMenu"
                         icon="i-heroicons-bars-4"
@@ -105,9 +96,6 @@
                     class="w-full min-h-16 block"
                     >로그아웃</UButton
                 >
-                <ThemeToggle
-                    class="w-full min-h-16 flex justify-center item-center"
-                />
             </template>
             <template v-else>
                 <NuxtLink to="/login">
@@ -128,12 +116,8 @@
                         회원가입
                     </UButton>
                 </NuxtLink>
-                <ThemeToggle
-                    class="w-full min-h-16 flex justify-center item-center"
-                />
             </template>
         </div>
-
         <slot />
     </div>
 </template>
