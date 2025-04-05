@@ -18,13 +18,6 @@ export default defineNuxtConfig({
         },
     },
 
-    nitro: {
-        prerender: {
-            crawlLinks: false,
-            routes: ["/"],
-        },
-    },
-
     modules: ["@nuxt/ui", "@element-plus/nuxt", "@pinia/nuxt"],
 
     css: ["~/assets/css/main.css", "@/assets/css/global.css"],
