@@ -44,10 +44,6 @@
                 >
                     - 추천 내역은 마이페이지에서 확인할 수 있습니다.
                 </div>
-
-                <div v-else class="mt-2 opacity-50">
-                    - 로그인시 상담 내역이 저장됩니다.
-                </div>
             </template>
 
             <!-- 결과 -->
@@ -106,11 +102,6 @@
                     </ul>
                 </div>
                 <div class="flex gap-4 mb-8">
-                    <!-- <UButton
-                        class="bg-second text-primary-foreground hover:bg-second/90"
-                    >
-                        저장하기
-                    </UButton> -->
                     <UButton
                         @click="clearResult"
                         class="bg-second text-primary-foreground hover:bg-second/90"
@@ -159,7 +150,7 @@ const authStore = useAuthStore();
 const loading: Ref<boolean> = ref(false);
 const token: Ref<string | null> = ref(null);
 
-const { $echarts } = useNuxtApp();
+// const { $echarts } = useNuxtApp();
 
 const resultDiet: Ref<Meal[] | null> = ref(null);
 const resultWorkout: Ref<string[] | null> = ref(null);
@@ -402,66 +393,60 @@ const clearResult = async () => {
     }
 };
 
-const goLogin = () => {
-    navigateTo({
-        path: "/login",
-    });
-};
+// watch(
+//     () => resultDiet.value,
+//     async (n) => {
+//         await nextTick();
 
-watch(
-    () => resultDiet.value,
-    async (n) => {
-        await nextTick();
+//         if (!n || !chartRef.value) return;
 
-        if (!n || !chartRef.value) return;
+//         const chart: echarts.EChartsType = $echarts.init(chartRef.value);
 
-        const chart: echarts.EChartsType = $echarts.init(chartRef.value);
+//         const option: echarts.EChartsOption = {
+//             tooltip: {
+//                 trigger: "item",
+//                 formatter: "{b}: {c}g ({d}%)",
+//             },
+//             legend: {
+//                 bottom: "0%",
+//             },
+//             series: [
+//                 {
+//                     name: "영양소 구성",
+//                     type: "pie",
+//                     radius: ["40%", "70%"],
+//                     avoidLabelOverlap: false,
+//                     itemStyle: {
+//                         borderRadius: 10,
+//                         borderColor: "#fff",
+//                         borderWidth: 2,
+//                     },
+//                     label: {
+//                         show: true,
+//                         position: "inside",
+//                         formatter: "{b}\n{d}%",
+//                         fontSize: 12,
+//                     },
+//                     data: [
+//                         {
+//                             value: totalNutrition.value.carbs,
+//                             name: "탄수화물",
+//                         },
+//                         {
+//                             value: totalNutrition.value.protein,
+//                             name: "단백질",
+//                         },
+//                         {
+//                             value: totalNutrition.value.fat,
+//                             name: "지방",
+//                         },
+//                     ],
+//                 },
+//             ],
+//         };
 
-        const option: echarts.EChartsOption = {
-            tooltip: {
-                trigger: "item",
-                formatter: "{b}: {c}g ({d}%)",
-            },
-            legend: {
-                bottom: "0%",
-            },
-            series: [
-                {
-                    name: "영양소 구성",
-                    type: "pie",
-                    radius: ["40%", "70%"],
-                    avoidLabelOverlap: false,
-                    itemStyle: {
-                        borderRadius: 10,
-                        borderColor: "#fff",
-                        borderWidth: 2,
-                    },
-                    label: {
-                        show: true,
-                        position: "inside",
-                        formatter: "{b}\n{d}%",
-                        fontSize: 12,
-                    },
-                    data: [
-                        {
-                            value: totalNutrition.value.carbs,
-                            name: "탄수화물",
-                        },
-                        {
-                            value: totalNutrition.value.protein,
-                            name: "단백질",
-                        },
-                        {
-                            value: totalNutrition.value.fat,
-                            name: "지방",
-                        },
-                    ],
-                },
-            ],
-        };
-
-        chart.setOption(option);
-        chart.resize();
-    }
-);
+//         chart.setOption(option);
+//         chart.resize();
+//     }
+// );
 </script>
