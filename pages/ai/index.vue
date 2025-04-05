@@ -111,14 +111,14 @@
                 </div>
             </template>
 
-            <div v-if="!loading && resultDiet != null" class="mb-12">
+            <!-- <div v-if="!loading && resultDiet != null" class="mb-12">
                 <div class="text-xl font-semibold mb-4">
                     📊 영양소 구성 비율
                 </div>
                 <div class="w-full md:w-96 mx-auto">
                     <div ref="chartRef" class="w-full h-[300px]" />
                 </div>
-            </div>
+            </div> -->
 
             <!-- 로딩 애니메이션 -->
             <div
@@ -150,7 +150,7 @@ const authStore = useAuthStore();
 const loading: Ref<boolean> = ref(false);
 const token: Ref<string | null> = ref(null);
 
-const { $echarts } = useNuxtApp();
+// const { $echarts } = useNuxtApp();
 
 const resultDiet: Ref<Meal[] | null> = ref(null);
 const resultWorkout: Ref<string[] | null> = ref(null);
@@ -161,19 +161,19 @@ const resultId: Ref<number | null> = ref(null);
 
 const chartRef: Ref<HTMLDivElement | null> = ref(null);
 
-const totalNutrition = computed((): Nutrition => {
-    if (resultDiet.value == null) return { carbs: 0, protein: 0, fat: 0 };
+// const totalNutrition = computed((): Nutrition => {
+//     if (resultDiet.value == null) return { carbs: 0, protein: 0, fat: 0 };
 
-    return resultDiet.value.reduce(
-        (acc: Nutrition, item: Meal) => {
-            acc.carbs += item.carbs;
-            acc.protein += item.protein;
-            acc.fat += item.fat;
-            return acc;
-        },
-        { carbs: 0, protein: 0, fat: 0 }
-    );
-});
+//     return resultDiet.value.reduce(
+//         (acc: Nutrition, item: Meal) => {
+//             acc.carbs += item.carbs;
+//             acc.protein += item.protein;
+//             acc.fat += item.fat;
+//             return acc;
+//         },
+//         { carbs: 0, protein: 0, fat: 0 }
+//     );
+// });
 
 const getGenderText = (): string => {
     if (userProfile.value == null) return "";
@@ -393,60 +393,60 @@ const clearResult = async () => {
     }
 };
 
-watch(
-    () => resultDiet.value,
-    async (n) => {
-        await nextTick();
+// watch(
+//     () => resultDiet.value,
+//     async (n) => {
+//         await nextTick();
 
-        if (!n || !chartRef.value) return;
+//         if (!n || !chartRef.value) return;
 
-        const chart: echarts.EChartsType = $echarts.init(chartRef.value);
+//         const chart: echarts.EChartsType = $echarts.init(chartRef.value);
 
-        const option: echarts.EChartsOption = {
-            tooltip: {
-                trigger: "item",
-                formatter: "{b}: {c}g ({d}%)",
-            },
-            legend: {
-                bottom: "0%",
-            },
-            series: [
-                {
-                    name: "영양소 구성",
-                    type: "pie",
-                    radius: ["40%", "70%"],
-                    avoidLabelOverlap: false,
-                    itemStyle: {
-                        borderRadius: 10,
-                        borderColor: "#fff",
-                        borderWidth: 2,
-                    },
-                    label: {
-                        show: true,
-                        position: "inside",
-                        formatter: "{b}\n{d}%",
-                        fontSize: 12,
-                    },
-                    data: [
-                        {
-                            value: totalNutrition.value.carbs,
-                            name: "탄수화물",
-                        },
-                        {
-                            value: totalNutrition.value.protein,
-                            name: "단백질",
-                        },
-                        {
-                            value: totalNutrition.value.fat,
-                            name: "지방",
-                        },
-                    ],
-                },
-            ],
-        };
+//         const option: echarts.EChartsOption = {
+//             tooltip: {
+//                 trigger: "item",
+//                 formatter: "{b}: {c}g ({d}%)",
+//             },
+//             legend: {
+//                 bottom: "0%",
+//             },
+//             series: [
+//                 {
+//                     name: "영양소 구성",
+//                     type: "pie",
+//                     radius: ["40%", "70%"],
+//                     avoidLabelOverlap: false,
+//                     itemStyle: {
+//                         borderRadius: 10,
+//                         borderColor: "#fff",
+//                         borderWidth: 2,
+//                     },
+//                     label: {
+//                         show: true,
+//                         position: "inside",
+//                         formatter: "{b}\n{d}%",
+//                         fontSize: 12,
+//                     },
+//                     data: [
+//                         {
+//                             value: totalNutrition.value.carbs,
+//                             name: "탄수화물",
+//                         },
+//                         {
+//                             value: totalNutrition.value.protein,
+//                             name: "단백질",
+//                         },
+//                         {
+//                             value: totalNutrition.value.fat,
+//                             name: "지방",
+//                         },
+//                     ],
+//                 },
+//             ],
+//         };
 
-        chart.setOption(option);
-        chart.resize();
-    }
-);
+//         chart.setOption(option);
+//         chart.resize();
+//     }
+// );
 </script>
