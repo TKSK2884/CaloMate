@@ -150,7 +150,7 @@ const authStore = useAuthStore();
 const loading: Ref<boolean> = ref(false);
 const token: Ref<string | null> = ref(null);
 
-// const { $echarts } = useNuxtApp();
+const { $echarts } = useNuxtApp();
 
 const resultDiet: Ref<Meal[] | null> = ref(null);
 const resultWorkout: Ref<string[] | null> = ref(null);
@@ -393,60 +393,60 @@ const clearResult = async () => {
     }
 };
 
-// watch(
-//     () => resultDiet.value,
-//     async (n) => {
-//         await nextTick();
+watch(
+    () => resultDiet.value,
+    async (n) => {
+        await nextTick();
 
-//         if (!n || !chartRef.value) return;
+        if (!n || !chartRef.value) return;
 
-//         const chart: echarts.EChartsType = $echarts.init(chartRef.value);
+        const chart: echarts.EChartsType = $echarts.init(chartRef.value);
 
-//         const option: echarts.EChartsOption = {
-//             tooltip: {
-//                 trigger: "item",
-//                 formatter: "{b}: {c}g ({d}%)",
-//             },
-//             legend: {
-//                 bottom: "0%",
-//             },
-//             series: [
-//                 {
-//                     name: "영양소 구성",
-//                     type: "pie",
-//                     radius: ["40%", "70%"],
-//                     avoidLabelOverlap: false,
-//                     itemStyle: {
-//                         borderRadius: 10,
-//                         borderColor: "#fff",
-//                         borderWidth: 2,
-//                     },
-//                     label: {
-//                         show: true,
-//                         position: "inside",
-//                         formatter: "{b}\n{d}%",
-//                         fontSize: 12,
-//                     },
-//                     data: [
-//                         {
-//                             value: totalNutrition.value.carbs,
-//                             name: "탄수화물",
-//                         },
-//                         {
-//                             value: totalNutrition.value.protein,
-//                             name: "단백질",
-//                         },
-//                         {
-//                             value: totalNutrition.value.fat,
-//                             name: "지방",
-//                         },
-//                     ],
-//                 },
-//             ],
-//         };
+        const option: echarts.EChartsOption = {
+            tooltip: {
+                trigger: "item",
+                formatter: "{b}: {c}g ({d}%)",
+            },
+            legend: {
+                bottom: "0%",
+            },
+            series: [
+                {
+                    name: "영양소 구성",
+                    type: "pie",
+                    radius: ["40%", "70%"],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: "#fff",
+                        borderWidth: 2,
+                    },
+                    label: {
+                        show: true,
+                        position: "inside",
+                        formatter: "{b}\n{d}%",
+                        fontSize: 12,
+                    },
+                    data: [
+                        {
+                            value: totalNutrition.value.carbs,
+                            name: "탄수화물",
+                        },
+                        {
+                            value: totalNutrition.value.protein,
+                            name: "단백질",
+                        },
+                        {
+                            value: totalNutrition.value.fat,
+                            name: "지방",
+                        },
+                    ],
+                },
+            ],
+        };
 
-//         chart.setOption(option);
-//         chart.resize();
-//     }
-// );
+        chart.setOption(option);
+        chart.resize();
+    }
+);
 </script>
