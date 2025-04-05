@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     nitro: {
         prerender: {
             crawlLinks: false,
-            routes: ["/", "/login", "/signup", "/profile", "/ai"],
+            routes: ["/", "/login", "/signup", "/profile"],
         },
     },
 
