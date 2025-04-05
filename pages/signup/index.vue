@@ -3,25 +3,44 @@
         <UCard class="max-w-md mx-auto bg-card p-8">
             <form @submit.prevent="trySignup">
                 <h2 class="text-2xl font-bold mb-6 text-center">회원가입</h2>
+                <p class="text-center text-sm text-muted-foreground mb-6">
+                    CaloMate와 함께 건강한 삶을 시작하세요.
+                </p>
+                <label class="block mb-1 font-medium">아이디</label>
+                <UInput
+                    v-model="formData.id"
+                    required
+                    icon="i-heroicons-user"
+                />
 
-                <div class="mb-2">아이디</div>
-                <UInput v-model="formData.id" required />
+                <label class="block mt-4 mb-1 font-medium">비밀번호</label>
+                <UInput
+                    v-model="formData.password"
+                    type="password"
+                    required
+                    icon="i-heroicons-lock-closed"
+                />
 
-                <div class="my-2">비밀번호</div>
-                <UInput v-model="formData.password" required />
+                <label class="block mt-4 mb-1 font-medium">비밀번호 확인</label>
+                <UInput
+                    v-model="confirmPassword"
+                    type="password"
+                    required
+                    icon="i-heroicons-lock-closed"
+                />
 
-                <div class="my-2">비밀번호 확인</div>
-                <UInput v-model="confirmPassword" required />
-
-                <div class="my-2">닉네임</div>
-                <UInput v-model="formData.nickname" required />
-
+                <label class="block mt-4 mb-1 font-medium">닉네임</label>
+                <UInput
+                    v-model="formData.nickname"
+                    required
+                    icon="i-heroicons-identification"
+                />
                 <UButton
                     class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
                     type="submit"
                     :loading="loading"
                 >
-                    회원가입
+                    CaloMate 시작하기
                 </UButton>
 
                 <p class="my-4 text-center text-sm text-muted-foreground">

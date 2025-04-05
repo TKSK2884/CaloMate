@@ -2,11 +2,20 @@
     <UContainer class="mt-8">
         <UCard class="max-w-md mx-auto">
             <form @submit.prevent="saveProfile">
-                <h2 class="text-2xl font-bold mb-6 text-center">
-                    프로필 {{ isProfile() ? "수정" : "입력" }}
+                <h2 class="text-2xl font-bold mb-2 text-center">
+                    내 프로필 정보 {{ isProfile() ? "수정하기" : "입력하기" }}
                 </h2>
-                <div class="mb-2">나이</div>
-                <UInput v-model="formData.age" type="number" />
+                <p class="text-sm text-muted-foreground text-center mb-6">
+                    AI가 식단과 운동을 추천하기 위해 필요한 정보를 입력해주세요.
+                </p>
+                <label class="block mb-1 font-medium text-sm text-gray-700"
+                    >나이</label
+                >
+                <UInput
+                    v-model="formData.age"
+                    type="number"
+                    placeholder="예: 28"
+                />
                 <div class="my-2">성별</div>
                 <URadioGroup
                     v-model="formData.gender"
@@ -16,7 +25,22 @@
                 <div class="my-2">키(cm)</div>
                 <UInput v-model="formData.height" type="number" />
                 <div class="my-2">몸무게(kg)</div>
+
                 <UInput v-model="formData.weight" type="number" />
+
+                <div
+                    v-if="bmi"
+                    class="mt-2 text-sm rounded bg-gray-50 border border-gray-200 py-2 px-3 text-center text-gray-600"
+                >
+                    💡 현재 BMI는
+                    <span class="font-bold text-gray-900">{{ bmi }}</span
+                    >이며,
+                    <span class="text-primary font-semibold">{{
+                        bmiComment
+                    }}</span
+                    >입니다.
+                </div>
+
                 <div class="my-2">활동 수준</div>
                 <USelectMenu
                     v-model="formData.activityLevel"
@@ -28,11 +52,12 @@
                     :options="targetOption"
                 />
                 <UButton
-                    class="w-full bg-second justify-center rounded-lg mt-4 text-primary-foreground hover:bg-second/90 disabled:bg-second"
-                    type="submit"
                     :loading="loading"
+                    icon="i-heroicons-check-circle"
+                    class="w-full bg-second mt-6 justify-center"
+                    type="submit"
                 >
-                    프로필 저장
+                    프로필 저장하고 AI 추천 받기
                 </UButton>
             </form>
         </UCard>
@@ -63,7 +88,7 @@ const formData: Ref<ProfileFormData> = ref({
     age: 20,
     gender: 0,
     height: 170,
-    weight: 50,
+    weight: 60,
     activityLevel: {},
     target: {},
 });
@@ -92,6 +117,29 @@ const targetOption = [
     { id: "maintain", label: "체중 유지" },
     { id: "gain_muscle", label: "근육 증가" },
 ];
+
+const bmi = computed(() => {
+    const height = formData.value.height;
+    const weight = formData.value.weight;
+
+    if (!height || !weight) return null;
+
+    const meter: number = height / 100;
+    const value: number = weight / (meter * meter);
+
+    return value.toFixed(1); // 소수점 한 자리
+});
+
+const bmiComment = computed(() => {
+    if (bmi.value == null) return "";
+
+    const value: number = parseFloat(bmi.value);
+
+    if (value < 18.5) return "저체중";
+    if (value < 23) return "정상 체중";
+    if (value < 25) return "과체중";
+    return "비만";
+});
 
 onMounted(async () => {
     await checkProfile();
@@ -204,7 +252,8 @@ const saveProfile = async () => {
 
         if (!result.success) {
             ElMessage({
-                message: "프로필 설정중 오류발생 다시 시도해주세요",
+                message:
+                    "프로필 설정 중 오류가 발생했습니다. 다시 시도해주세요.",
                 type: "error",
             });
 

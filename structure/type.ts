@@ -81,6 +81,12 @@ export interface Meal {
     checked: boolean;
 }
 
+export interface Nutrition {
+    carbs: number;
+    protein: number;
+    fat: number;
+}
+
 export interface AIResponse {
     diet: Meal[];
     workout: string[];

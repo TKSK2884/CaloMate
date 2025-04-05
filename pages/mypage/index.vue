@@ -93,13 +93,22 @@
                                 @click="selectContent(index)"
                                 class="cursor-pointer mb-2"
                             >
-                                <div class="text-xl font-bold">
+                                <div
+                                    class="text-xl font-bold flex justify-between items-center"
+                                >
                                     {{
                                         convertKoreaTime(
                                             item.created_at,
                                             KoreaTimeEnum.Day
                                         )
                                     }}
+                                    <span class="text-sm text-gray-400">
+                                        {{
+                                            activeContent === index
+                                                ? "닫기 ▲"
+                                                : "펼치기 ▼"
+                                        }}
+                                    </span>
                                 </div>
                             </div>
 
@@ -222,29 +231,17 @@ onMounted(async () => {
     }
 
     await fetchDashboard();
+
+    window.addEventListener("resize", handleResize);
 });
 
-const fetchMypageHistory = async () => {
-    try {
-        loading.value = true;
+onBeforeUnmount(() => {
+    window.removeEventListener("resize", handleResize);
+});
 
-        const result: APIResponse<MypageHistory[]> = await $fetch(
-            "/mypage/history",
-            {
-                baseURL: config.public.apiBase,
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${authStore.accessToken}`,
-                },
-            }
-        );
-
-        historyList.value = result.data;
-    } catch (error) {
-        return;
-    } finally {
-        loading.value = false;
-    }
+const handleResize = () => {
+    myChart?.resize();
+    myChart2?.resize();
 };
 
 const fetchMypageProfile = async () => {
@@ -295,6 +292,29 @@ const fetchMypageChart = async () => {
     YAxisData2.value = result.data.map((item) => {
         return item.rate;
     });
+};
+
+const fetchMypageHistory = async () => {
+    try {
+        loading.value = true;
+
+        const result: APIResponse<MypageHistory[]> = await $fetch(
+            "/mypage/history",
+            {
+                baseURL: config.public.apiBase,
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${authStore.accessToken}`,
+                },
+            }
+        );
+
+        historyList.value = result.data;
+    } catch (error) {
+        return;
+    } finally {
+        loading.value = false;
+    }
 };
 
 const saveWeightInfo = async () => {
@@ -438,4 +458,8 @@ watch(
         }
     }
 );
+
+watch(activeIndex, (n) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
 </script>
