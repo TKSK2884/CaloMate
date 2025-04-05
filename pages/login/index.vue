@@ -65,12 +65,14 @@ onMounted(async () => {
         navigateTo("/mypage");
     }
 
-    // token.value = sessionStorage.getItem("token");
+    if (process.server) return;
 
     window.addEventListener("message", messageHandler);
 });
 
 onBeforeUnmount(() => {
+    if (process.server) return;
+
     window.removeEventListener("message", messageHandler);
 });
 
@@ -100,18 +102,7 @@ const tryLogin = async () => {
 
         authStore.login(result.data);
 
-        // if (result.message != null) {
-        //     ElMessage({
-        //         message: result.message,
-        //         type: "success",
-        //     });
-        // }
-
         ElMessage({ message: "로그인 성공", type: "success" });
-
-        // if (token.value != null) {
-        //     sessionStorage.clear();
-        // }
 
         navigateTo("/mypage");
     } catch (error) {

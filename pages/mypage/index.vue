@@ -463,6 +463,8 @@ watch(
 );
 
 watch(activeIndex, (n) => {
+    if (process.server) return;
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 </script>
