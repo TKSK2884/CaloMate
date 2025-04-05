@@ -143,8 +143,6 @@
 </template>
 
 <script setup lang="ts">
-import * as echarts from "echarts";
-
 import { useAuthStore } from "~/stores/auth";
 import type {
     AIResponse,
@@ -160,6 +158,8 @@ const authStore = useAuthStore();
 
 const loading: Ref<boolean> = ref(false);
 const token: Ref<string | null> = ref(null);
+
+const { $echarts } = useNuxtApp();
 
 const resultDiet: Ref<Meal[] | null> = ref(null);
 const resultWorkout: Ref<string[] | null> = ref(null);
@@ -415,11 +415,7 @@ watch(
 
         if (!n || !chartRef.value) return;
 
-        if (echarts.getInstanceByDom(chartRef.value)) {
-            echarts.dispose(chartRef.value);
-        }
-
-        const chart: echarts.EChartsType = echarts.init(chartRef.value);
+        const chart: echarts.EChartsType = $echarts.init(chartRef.value);
 
         const option: echarts.EChartsOption = {
             tooltip: {
