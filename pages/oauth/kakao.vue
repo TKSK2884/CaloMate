@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { resultProps } from "element-plus";
 import type { APIResponse, LoginData } from "~/structure/type";
 
 const config = useRuntimeConfig();
