@@ -117,14 +117,6 @@
                     >
                         다시하기
                     </UButton>
-
-                    <UButton
-                        v-if="!isLogin()"
-                        @click="goLogin()"
-                        class="bg-second text-primary-foreground hover:bg-second/90"
-                    >
-                        로그인하고 결과 저장하기
-                    </UButton>
                 </div>
             </template>
 
@@ -168,7 +160,7 @@ const authStore = useAuthStore();
 
 const loading: Ref<boolean> = ref(false);
 const token: Ref<string | null> = ref(null);
-// const generateResult: Ref<AIResponse | null> = ref(null);
+
 const resultDiet: Ref<Meal[] | null> = ref(null);
 const resultWorkout: Ref<string[] | null> = ref(null);
 
@@ -252,7 +244,12 @@ const onDietCheck = async (item: Meal, index: number) => {
         },
     });
 
-    console.log("저장 완료");
+    ElMessage({
+        message: item.checked
+            ? "식단 완료로 체크했습니다."
+            : "체크를 취소했습니다.",
+        type: "info",
+    });
 };
 
 onMounted(() => {
@@ -279,12 +276,6 @@ onMounted(() => {
         userProfile.value = authStore.userProfile;
 
         getUserDiet();
-    }
-});
-
-onBeforeUnmount(() => {
-    if (token.value != null) {
-        sessionStorage.setItem("token", token.value);
     }
 });
 
