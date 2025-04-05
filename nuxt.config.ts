@@ -18,20 +18,6 @@ export default defineNuxtConfig({
         },
     },
 
-    nitro: {
-        prerender: {
-            crawlLinks: true,
-            ignore: [
-                "/mypage",
-                "/profile",
-                "/ai",
-                "/login",
-                "/signup",
-                "/oauth/kakao",
-            ],
-        },
-    },
-
     modules: ["@nuxt/ui", "@element-plus/nuxt", "@pinia/nuxt"],
 
     css: ["~/assets/css/main.css", "@/assets/css/global.css"],
