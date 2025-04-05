@@ -47,7 +47,7 @@ const config = useRuntimeConfig();
 const authStore = useAuthStore();
 
 const loading: Ref<boolean> = ref(false);
-// const token: Ref<string | null> = ref(null);
+const token: Ref<string | null> = ref(null);
 
 const formData: Ref<loginFormData> = ref({
     id: "",
@@ -93,19 +93,19 @@ const tryLogin = async () => {
             method: "POST",
             body: {
                 ...formData.value,
-                // token: token.value,
+                token: token.value,
             },
             credentials: "include",
         });
 
         authStore.login(result.data);
 
-        if (result.message != null) {
-            ElMessage({
-                message: result.message,
-                type: "success",
-            });
-        }
+        // if (result.message != null) {
+        //     ElMessage({
+        //         message: result.message,
+        //         type: "success",
+        //     });
+        // }
 
         ElMessage({ message: "로그인 성공", type: "success" });
 
