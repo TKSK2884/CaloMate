@@ -232,13 +232,10 @@ onMounted(async () => {
 
     await fetchDashboard();
 
-    if (process.server) return;
     window.addEventListener("resize", handleResize);
 });
 
 onBeforeUnmount(() => {
-    if (process.server) return;
-
     window.removeEventListener("resize", handleResize);
 });
 

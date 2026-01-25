@@ -65,14 +65,10 @@ onMounted(async () => {
         navigateTo("/mypage");
     }
 
-    if (process.server) return;
-
     window.addEventListener("message", messageHandler);
 });
 
 onBeforeUnmount(() => {
-    if (process.server) return;
-
     window.removeEventListener("message", messageHandler);
 });
 
