@@ -7,11 +7,9 @@
                 <!-- 로고 -->
                 <NuxtLink to="/" class="flex items-center space-x-2">
                     <h1 class="text-3xl font-black tracking-tight">
-                        <span class="text-green-500">Calo</span>Mate<span
-                            class="text-sm"
-                        >
-                            AI
-                        </span>
+                        <span class="text-green-500">Calo</span
+                        ><span class="text-black">Mate</span
+                        ><span class="text-sm text-black"> AI </span>
                     </h1>
                 </NuxtLink>
 
@@ -32,7 +30,9 @@
                     </template>
 
                     <template v-else>
-                        <NuxtLink to="/login" class="nav-link">로그인</NuxtLink>
+                        <NuxtLink to="/login" class="nav-link text-black"
+                            >로그인</NuxtLink
+                        >
                         <NuxtLink to="/signup">
                             <UButton
                                 class="bg-primary text-white hover:bg-primary/90"
@@ -129,8 +129,8 @@ const route = useRoute();
 
 const pageTitle: Ref<string> = ref("");
 const isHeader: Ref<boolean> = ref(true);
-const isLoginMenu = ref(false);
-const isMenuOpen = ref(false);
+const isLoginMenu: Ref<boolean> = ref(false);
+const isMenuOpen: Ref<boolean> = ref(false);
 
 const authStore = useAuthStore();
 
