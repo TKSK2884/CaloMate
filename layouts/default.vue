@@ -7,9 +7,9 @@
                 <!-- 로고 -->
                 <NuxtLink to="/" class="flex items-center space-x-2">
                     <h1 class="text-3xl font-black tracking-tight">
-                        <span class="text-green-500">Calo</span
-                        ><span class="text-black">Mate</span
-                        ><span class="text-sm text-black"> AI </span>
+                        <span class="text-green-500">Calo</span>
+                        <span class="text-black">Mate</span>
+                        <span class="text-sm text-black"> AI </span>
                     </h1>
                 </NuxtLink>
 
